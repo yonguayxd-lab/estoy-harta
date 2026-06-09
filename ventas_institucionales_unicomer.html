@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventas Institucionales Unicomer - Instructivo Operativo</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        unicomer: {
+                            blue: '#0056B3',
+                            dark: '#001A3F',
+                            cyan: '#38BDF8',
+                            magenta: '#E6007E',
+                            success: '#10B981'
+                        },
+                        ui: {
+                            base: '#050B14',
+                            surface: '#0E1726',
+                            elevated: '#1E293B'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: #020617;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .presentation-viewport {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 56.25vw;
+            max-height: 100vh;
+            max-width: 177.78vh;
+            position: relative;
+            background-color: #050B14;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.95);
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            padding: 3vw 4.5vw;
+            z-index: 1;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 10;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 85% 15%, rgba(0, 86, 179, 0.12) 0%, transparent 60%),
+                        radial-gradient(circle at 15% 85%, rgba(230, 0, 126, 0.08) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .slide-title {
+            font-size: 2.2vw;
+            font-weight: 700;
+            margin-bottom: 1.2vw;
+            display: flex;
+            align-items: center;
+            gap: 0.8vw;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.8vw;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .slide-title i { color: #E6007E; }
+
+        .glass-panel {
+            background: rgba(14, 23, 38, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 0.8vw;
+            padding: 1.2vw;
+        }
+
+        .section-header {
+            font-size: 1.4vw;
+            font-weight: 600;
+            color: #38BDF8;
+            margin-bottom: 0.8vw;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .procedure-step {
+            background: rgba(14, 23, 38, 0.5);
+            border-left: 4px solid #E6007E;
+            padding: 1vw;
+            margin-bottom: 0.8vw;
+            border-radius: 0.4vw;
+            transition: all 0.3s ease;
+        }
+
+        .procedure-step:hover {
+            background: rgba(14, 23, 38, 0.8);
+            border-left-color: #38BDF8;
+            transform: translateX(4px);
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 2.2vw;
+            height: 2.2vw;
+            background: linear-gradient(135deg, #0056B3, #E6007E);
+            border-radius: 50%;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            line-height: 2.2vw;
+            font-size: 1vw;
+            margin-right: 0.6vw;
+            vertical-align: middle;
+        }
+
+        .task-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85vw;
+        }
+
+        .task-table th {
+            background: rgba(56, 189, 248, 0.1);
+            color: #38BDF8;
+            padding: 0.8vw;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-transform: uppercase;
+        }
+
+        .task-table td {
+            padding: 0.8vw;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #e5e7eb;
+        }
+
+        .task-table tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.3vw 0.8vw;
+            background: rgba(230, 0, 126, 0.2);
+            color: #E6007E;
+            border-radius: 0.3vw;
+            font-size: 0.75vw;
+            font-weight: 600;
+            text-transform: uppercase;
+            border: 1px solid rgba(230, 0, 126, 0.4);
+        }
+
+        .nav-controls {
+            position: absolute;
+            bottom: 1.8vw;
+            left: 0; right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 4.5vw;
+            z-index: 50;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            width: 2.8vw;
+            height: 2.8vw;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1vw;
+            backdrop-filter: blur(8px);
+        }
+
+        .nav-btn:hover {
+            background: #E6007E;
+            border-color: #E6007E;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(230, 0, 126, 0.4);
+        }
+
+        .progress-dot {
+            width: 0.6vw;
+            height: 0.6vw;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0 0.3vw;
+        }
+
+        .progress-dot.active {
+            background: #E6007E;
+            transform: scale(1.5);
+            box-shadow: 0 0 12px rgba(230, 0, 126, 0.6);
+        }
+
+        #fullscreen-btn {
+            position: absolute;
+            top: 1.5vw;
+            right: 1.5vw;
+            z-index: 100;
+        }
+
+        .text-sm-vw { font-size: 0.9vw; }
+        .text-base-vw { font-size: 1vw; }
+        .text-lg-vw { font-size: 1.2vw; }
+        .text-xl-vw { font-size: 1.4vw; }
+        .text-2xl-vw { font-size: 1.8vw; }
+        .text-3xl-vw { font-size: 2.4vw; }
+        .text-4xl-vw { font-size: 3.2vw; }
+        .text-5xl-vw { font-size: 4.2vw; }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .row-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5vw;
+        }
+
+        .info-box {
+            background: rgba(56, 189, 248, 0.05);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 0.6vw;
+            padding: 1vw;
+            color: #e5e7eb;
+        }
+
+        .alert-box {
+            background: rgba(230, 0, 126, 0.08);
+            border-left: 4px solid #E6007E;
+            padding: 1vw;
+            border-radius: 0.4vw;
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-viewport">
+    <div class="slide-container">
+
+        <button id="fullscreen-btn" class="w-[2.6vw] h-[2.6vw] bg-white/5 hover:bg-white/10 border border-white/10 rounded-full flex items-center justify-center text-white text-[1vw] backdrop-blur-md transition-all cursor-pointer shadow-lg" onclick="toggleFullscreen()">
+            <i class="fa-solid fa-expand"></i>
+        </button>
+
+        <!-- SLIDE 1: PORTADA -->
+        <div class="slide active" style="background: linear-gradient(135deg, #050B14 0%, #001A3F 100%);">
+            <div class="absolute top-[2vw] left-[4.5vw] z-20">
+                <div class="flex items-center gap-[0.8vw] bg-white/5 border border-white/10 px-[1.2vw] py-[0.5vw] rounded-full backdrop-blur-md">
+                    <span class="text-[1.1vw] font-bold tracking-wider text-white font-heading">
+                        <span>UNI</span><span class="text-unicomer-magenta">COMER</span>
+                        <span class="text-unicomer-cyan ml-[0.3vw]">ECUADOR</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex-grow flex flex-col justify-center">
+                <div class="inline-flex items-center gap-[0.6vw] bg-unicomer-magenta/10 border border-unicomer-magenta/30 px-[1vw] py-[0.3vw] rounded-full mb-[1.5vw] w-fit">
+                    <i class="fa-solid fa-file-shield text-unicomer-magenta text-[0.8vw]"></i>
+                    <span class="text-[0.7vw] font-bold text-unicomer-magenta uppercase">Manual de Procedimientos</span>
+                </div>
+
+                <h1 class="text-5xl-vw font-extrabold mb-[1.2vw] text-white font-heading leading-tight">
+                    Ventas<br><span class="bg-gradient-to-r from-unicomer-cyan to-unicomer-magenta bg-clip-text text-transparent">Institucionales</span>
+                </h1>
+
+                <p class="text-2xl-vw font-light text-gray-400 border-l-2 border-unicomer-magenta pl-[1.2vw] mb-[2vw] leading-relaxed">
+                    Código: SM.CA - PR.12.02 | Versión 02 | Julio 2022
+                </p>
+
+                <div class="text-base-vw text-gray-500 space-y-[0.4vw]">
+                    <div><i class="fa-solid fa-building text-unicomer-cyan mr-[0.4vw]"></i> Dirección de Riesgos y Control Interno</div>
+                    <div><i class="fa-solid fa-shield-halved text-unicomer-magenta mr-[0.4vw]"></i> Auditoría y Cumplimiento Normativo</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: OBJETIVO Y ALCANCE -->
+        <div class="slide">
+            <h2 class="slide-title"><i class="fa-solid fa-bullseye"></i> Objetivo y Alcance</h2>
+            
+            <div class="flex-grow flex gap-[2vw] justify-between">
+                <div class="w-[48%] glass-panel flex flex-col justify-between">
+                    <div>
+                        <div class="section-header mb-[0.6vw]">Objetivo</div>
+                        <p class="text-base-vw text-gray-300 leading-relaxed">
+                            Establecer y describir los lineamientos operativos de las ventas de mercadería (nueva o seminueva) a instituciones constituyentes como personas jurídicas para sus colaboradores o consumo propio.
+                        </p>
+                    </div>
+                    <div class="mt-[1.2vw] p-[0.8vw] bg-unicomer-blue/10 border border-unicomer-blue/20 rounded">
+                        <i class="fa-solid fa-check text-unicomer-cyan mr-[0.4vw]"></i>
+                        <span class="text-sm-vw text-unicomer-cyan font-bold">Aplicable a todas las cadenas de Unicomer Ecuador</span>
+                    </div>
+                </div>
+
+                <div class="w-[48%] glass-panel flex flex-col justify-between">
+                    <div>
+                        <div class="section-header mb-[0.6vw]">Alcance</div>
+                        <p class="text-base-vw text-gray-300 leading-relaxed">
+                            Este procedimiento rige de manera obligatoria para las áreas de <strong>Ventas, Crédito y Cobros</strong>, involucrando a:
+                        </p>
+                        <ul class="text-sm-vw text-gray-400 mt-[0.6vw] space-y-[0.3vw] ml-[1.2vw]">
+                            <li>✓ Ejecutivos de Ventas</li>
+                            <li>✓ Jefes de Tienda</li>
+                            <li>✓ Analistas de Crédito</li>
+                            <li>✓ Supervisores de Cobranzas</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: DEFINICIONES CLAVE -->
+        <div class="slide">
+            <h2 class="slide-title"><i class="fa-solid fa-book-open"></i> Definiciones Clave</h2>
+            
+            <div class="flex-grow overflow-y-auto">
+                <div class="glass-panel">
+                    <table class="task-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 25%;">Concepto</th>
+                                <th>Definición Operativa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Tipo de Convenio</strong></td>
+                                <td>Clasificación otorgada a la empresa cliente, en base a la cual se determinan los documentos requeridos y límites de crédito.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Garante Solidario</strong></td>
+                                <td>La institución es responsable de manera directa, solidaria y total de la deuda adquirida ante Unicomer de Ecuador S.A.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Agente de Retención</strong></td>
+                                <td>La institución retiene y consolida valores desde rol de pagos de sus colaboradores para liquidación directa a Unicomer.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Línea TXC</strong></td>
+                                <td>Cupo revolvente rotativo bajo parámetros similares a una tarjeta de crédito corporativa.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Planes Institucionales</strong></td>
+                                <td><span class="badge">Plan A</span> Colaboradores | <span class="badge">Plan B</span> Convenio Especial | <span class="badge">Plan D</span> Compra Directa</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: REGLAS DE NEGOCIO INVIOLABLES -->
+        <div class="slide">
+            <h2 class="slide-title"><i class="fa-solid fa-shield-halved"></i> Reglas de Negocio (Inviolables)</h2>
+            
+            <div class="flex-grow flex flex-col justify-center gap-[0.8vw]">
+                
+                <div class="procedure-step">
+                    <span class="step-number">1</span>
+                    <strong class="text-base-vw text-white">Autorización de Excepciones</strong>
+                    <p class="text-sm-vw text-gray-400 mt-[0.2vw]">Toda excepción requiere autorización de Gerencia de Ventas con visto bueno de Gerencia General.</p>
+                </div>
+
+                <div class="procedure-step">
+                    <span class="step-number">2</span>
+                    <strong class="text-base-vw text-white">Cobertura Geográfica</strong>
+                    <p class="text-sm-vw text-gray-400 mt-[0.2vw]">Todas las cadenas de Unicomer de Ecuador están autorizadas a realizar ventas institucionales.</p>
+                </div>
+
+                <div class="procedure-step">
+                    <span class="step-number">3</span>
+                    <strong class="text-base-vw text-white">Tipo de Mercadería</strong>
+                    <p class="text-sm-vw text-gray-400 mt-[0.2vw]">Toda venta institucional aplica exclusivamente a mercadería <strong>nueva y seminueva (Ofertón)</strong>.</p>
+                </div>
+
+                <div class="procedure-step">
+                    <span class="step-number">4</span>
+                    <strong class="text-base-vw text-white">Registro Obligatorio en SIAR</strong>
+                    <p class="text-sm-vw text-gray-400 mt-[0.2vw]">Todo convenio institucional debe registrarse en SIAR y regirse a sus cláusulas. Ventas por otro canal deben ser anuladas inmediatamente.</p>
+                </div>
+
+                <div class="procedure-step">
+                    <span class="step-number">5</span>
+                    <strong class="text-base-vw text-white">Vigencia Máxima</strong>
+                    <p class="text-sm-vw text-gray-400 mt-[0.2vw]">Todo convenio tiene vigencia máxima de <strong>1 año</strong>. Excepciones requieren aprobación de Gerencia de Crédito y Cobros.</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SLIDE 5: PROCESO DE 6 FASES -->
+        <div class="slide">
+            <h2 class="slide-title"><i class="fa-solid fa-diagram-project"></i> Flujo de Ventas Institucionales (6 Fases)</h2>
+            
+            <div class="flex-grow flex flex-col justify-center gap-[0.6vw]">
+                
+                <div class="glass-panel p-[0.8vw] flex items-center gap-[0.8vw]">
+                    <div class="w-[1.8vw] h-[1.8vw] bg-gradient-to-br from-unicomer-blue to-unicomer-magenta rounded-full flex items-center justify-center text-white font-bold text-[0.8vw]">1</div>
+                    <div>
+                        <strong class="text-base-vw text-white">Establecer Criterios</strong>
+                        <p class="text-sm-vw text-gray-400">Seleccionar tipo de negociación y recolectar documentos requeridos.</p>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-[0.8vw] flex items-center gap-[0.8vw]">
+                    <div class="w-[1.8vw] h-[1.8vw] bg-gradient-to-br from-unicomer-blue to-unicomer-magenta rounded-full flex items-center justify-center text-white font-bold text-[0.8vw]">2</div>
+                    <div>
+                        <strong class="text-base-vw text-white">Validar Documentación</strong>
+                        <p class="text-sm-vw text-gray-400">Verificar completitud, firmas y validación en Superintendencia de Compañías y SRI.</p>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-[0.8vw] flex items-center gap-[0.8vw]">
+                    <div class="w-[1.8vw] h-[1.8vw] bg-gradient-to-br from-unicomer-blue to-unicomer-magenta rounded-full flex items-center justify-center text-white font-bold text-[0.8vw]">3</div>
+                    <div>
+                        <strong class="text-base-vw text-white">Registrar en SIAR</strong>
+                        <p class="text-sm-vw text-gray-400">Ingreso de convenio, representante legal y requisitos escaneados en el sistema.</p>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-[0.8vw] flex items-center gap-[0.8vw]">
+                    <div class="w-[1.8vw] h-[1.8vw] bg-gradient-to-br from-unicomer-blue to-unicomer-magenta rounded-full flex items-center justify-center text-white font-bold text-[0.8vw]">4</div>
+                    <div>
+                        <strong class="text-base-vw text-white">Aprobar Cupo</strong>
+                        <p class="text-sm-vw text-gray-400">Validación de Buró de Crédito y creación de cupo según monto y tipo de plan.</p>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-[0.8vw] flex items-center gap-[0.8vw]">
+                    <div class="w-[1.8vw] h-[1.8vw] bg-gradient-to-br from-unicomer-blue to-unicomer-magenta rounded-full flex items-center justify-center text-white font-bold text-[0.8vw]">5</div>
+                    <div>
+                        <strong class="text-base-vw text-white">Generar Venta</strong>
+                        <p class="text-sm-vw text-gray-400">Cotización, orden de compra y solicitud de crédito a través del canal INSTITUCIONES.</p>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-[0.8vw] flex items-center gap-[0.8vw]">
+                    <div class="w-[1.8vw] h-[1.8vw] bg-gradient-to-br from-unicomer-blue to-unicomer-magenta rounded-full flex items-center justify-center text-white font-bold text-[0.8vw]">6</div>
+                    <div>
+                        <strong class="text-base-vw text-white">Seguimiento y Cobros</strong>
+                        <p class="text-sm-vw text-gray-400">Monitoreo de pagos, actualización de estatus y gestión de cobranza.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SLIDE 6: RESPONSABILIDADES POR ÁREA -->
+        <div class="slide">
+            <h2 class="slide-title"><i class="fa-solid fa-users-gear"></i> Responsabilidades por Área</h2>
+            
+            <div class="flex-grow grid grid-cols-3 gap-[1vw] items-stretch">
+                
+                <div class="glass-panel border-l-[4px] border-unicomer-cyan flex flex-col">
+                    <h3 class="text-lg-vw font-bold text-unicomer-cyan mb-[0.6vw]">VENTAS</h3>
+                    <ul class="text-sm-vw text-gray-300 space-y-[0.4vw] flex-grow">
+                        <li>✓ Registrar institución en SIAR</li>
+                        <li>✓ Entregar cotizaciones</li>
+                        <li>✓ Generar solicitudes de compra</li>
+                        <li>✓ Seguimiento de órdenes</li>
+                        <li>✓ Control de inventario</li>
+                    </ul>
+                </div>
+
+                <div class="glass-panel border-l-[4px] border-unicomer-magenta flex flex-col">
+                    <h3 class="text-lg-vw font-bold text-unicomer-magenta mb-[0.6vw]">CRÉDITO</h3>
+                    <ul class="text-sm-vw text-gray-300 space-y-[0.4vw] flex-grow">
+                        <li>✓ Validar documentación</li>
+                        <li>✓ Consultar Buró de Crédito</li>
+                        <li>✓ Aprobar cupos</li>
+                        <li>✓ Evaluar riesgo crediticio</li>
+                        <li>✓ Autorizar límites</li>
+                    </ul>
+                </div>
+
+                <div class="glass-panel border-l-[4px] border-unicomer-success flex flex-col">
+                    <h3 class="text-lg-vw font-bold text-unicomer-success mb-[0.6vw]">COBROS</h3>
+                    <ul class="text-sm-vw text-gray-300 space-y-[0.4vw] flex-grow">
+                        <li>✓ Monitoreo de pagos</li>
+                        <li>✓ Gestión de cobranza</li>
+                        <li>✓ Control de atrasos</li>
+                        <li>✓ Generación de reportes</li>
+                        <li>✓ Actualización de status</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SLIDE 7: PLANES INSTITUCIONALES -->
+        <div class="slide">
+            <h2 class="slide-title"><i class="fa-solid fa-box"></i> Planes Institucionales Disponibles</h2>
+            
+            <div class="flex-grow grid grid-cols-2 gap-[1.5vw]">
+                
+                <div class="glass-panel">
+                    <h3 class="text-lg-vw font-bold text-unicomer-cyan mb-[0.8vw] flex items-center gap-[0.4vw]">
+                        <i class="fa-solid fa-people-group"></i> Plan A: Colaboradores
+                    </h3>
+                    <p class="text-sm-vw text-gray-400 mb-[0.6vw]">Venta para empleados de la institución con descuentos especiales.</p>
+                    <div class="space-y-[0.3vw] text-sm-vw text-gray-300">
+                        <div><i class="fa-solid fa-check text-unicomer-success mr-[0.3vw]"></i> Garante Solidario</div>
+                        <div><i class="fa-solid fa-check text-unicomer-success mr-[0.3vw]"></i> Cuota por nómina</div>
+                        <div><i class="fa-solid fa-check text-unicomer-success mr-[0.3vw]"></i> Validación simple</div>
+                    </div>
+                </div>
+
+                <div class="glass-panel">
+                    <h3 class="text-lg-vw font-bold text-unicomer-cyan mb-[0.8vw] flex items-center gap-[0.4vw]">
+                        <i class="fa-solid fa-handshake"></i> Plan B: Convenio Especial
+                    </h3>
+                    <p class="text-sm-vw text-gray-400 mb-[0.6vw]">Acuerdo comercial con términos y condiciones negociados.</p>
+                    <div class="space-y-[0.3vw] text-sm-vw text-gray-300">
+                        <div><i class="fa-solid fa-check text-unicomer-success mr-[0.3vw]"></i> Agente de retención</div>
+                        <div><i class="fa-solid fa-check text-unicomer-success mr-[0.3vw]"></i> Plazo flexible</div>
+                        <div><i class="fa-solid fa-check text-unicomer-success mr-[0.3vw]"></i> Descuento personalizado</div>
+                    </div>
+                </div>
+
+                <div class="glass-panel">
+                    <h3 class="text-lg-vw font-bold text-unicomer-magenta mb-[0.8vw] flex items-center gap-[0.4vw]">
+                        <i class="fa-solid fa-store"></i> Plan D: Pequeños Negocios
+                    </h3>
+                    <p class="text-sm-vw text-gray-400 mb-[0.6vw]">Compra directa para micro y pequeñas empresas con límite de crédito.</p>
+                    <div class="space-y-[0.3vw] text-sm-vw text-gray-300">
+                        <div><i class="fa-solid fa-check text-unicomer-success mr-[0.3vw]"></i> Línea TXC rotativa</div>
+                        <div><i class="fa-solid fa-check text-unicomer-success mr-[0.3vw]"></i> Bono sobre compra (1%)</div>
+                        <div><i class="fa-solid fa-check text-unicomer-success mr-[0.3vw]"></i> Requisitos mínimos</div>
+                    </div>
+                </div>
+
+                <div class="glass-panel">
+                    <h3 class="text-lg-vw font-bold text-unicomer-magenta mb-[0.8vw] flex items-center gap-[0.4vw]">
+                        <i class="fa-solid fa-rectangle-list"></i> Plan Especial
+                    </h3>
+                    <p class="text-sm-vw text-gray-400 mb-[0.6vw]">Venta sin entrega de mercadería (programas internos).</p>
+                    <div class="space-y-[0.3vw] text-sm-vw text-gray-300">
+                        <div><i class="fa-solid fa-check text-unicomer-success mr-[0.3vw]"></i> Aprobación rápida (hasta USD 5K)</div>
+                        <div><i class="fa-solid fa-check text-unicomer-success mr-[0.3vw]"></i> Sin validación Buró</div>
+                        <div><i class="fa-solid fa-check text-unicomer-success mr-[0.3vw]"></i> Procesos acelerados</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SLIDE 8: DOCUMENTACIÓN REQUERIDA -->
+        <div class="slide">
+            <h2 class="slide-title"><i class="fa-solid fa-file-contract"></i> Documentación Requerida por Plan</h2>
+            
+            <div class="flex-grow overflow-y-auto pr-[1vw]">
+                <div class="glass-panel">
+                    <table class="task-table">
+                        <thead>
+                            <tr>
+                                <th>Plan</th>
+                                <th>Documentos Obligatorios</th>
+                                <th>Validaciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Plan A</strong><br>Colaboradores</td>
+                                <td>• Cédula Representante Legal<br>• Convenio firmado<br>• Firmas responsables (Anexo 5)</td>
+                                <td>• Superintendencia Compañías<br>• SRI<br>• Base interna</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Plan B</strong><br>Convenio</td>
+                                <td>• RUC actualizado<br>• Contrato de Compraventa<br>• Cédula Representante</td>
+                                <td>• Buró de Crédito<br>• Validación Legal<br>• Gerente General</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Plan D</strong><br>Pequeños Negocios</td>
+                                <td>• Formulario (Anexo 3)<br>• RUC básico<br>• Cédula representante</td>
+                                <td>• Jefe de Tienda<br>• Control Interno<br>• Análisis rápido</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Plan Especial</strong><br>Sin Mercadería</td>
+                                <td>• Identificación representante<br>• Autorización firmada<br>• Datos bancarios</td>
+                                <td>• Verificación básica<br>• Sin Buró (excepción)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: ALERTAS Y SANCIONES -->
+        <div class="slide">
+            <h2 class="slide-title"><i class="fa-solid fa-triangle-exclamation"></i> Régimen de Sanciones</h2>
+            
+            <div class="flex-grow flex gap-[2vw] justify-between">
+                <div class="w-[48%] alert-box">
+                    <h3 class="text-lg-vw font-bold text-amber-400 mb-[0.8vw] flex items-center gap-[0.4vw]">
+                        <i class="fa-solid fa-circle-exclamation"></i> Falta Leve
+                    </h3>
+                    <p class="text-sm-vw text-gray-300 leading-relaxed mb-[0.6vw]">
+                        No seguir los controles, saltarse firmas o validaciones en el expediente de crédito.
+                    </p>
+                    <div class="p-[0.6vw] bg-amber-900/30 rounded text-sm-vw text-amber-200 border border-amber-700/30">
+                        <strong>Sanción:</strong> Multa de hasta el <strong>10% de remuneración mensual</strong><br>
+                        <small>*Tercera reincidencia en mes = Falta Grave</small>
+                    </div>
+                </div>
+
+                <div class="w-[48%]" style="background: rgba(220, 53, 69, 0.08); border-left: 4px solid #DC3545; padding: 1vw; border-radius: 0.4vw;">
+                    <h3 class="text-lg-vw font-bold text-red-400 mb-[0.8vw] flex items-center gap-[0.4vw]">
+                        <i class="fa-solid fa-gavel"></i> Falta Grave
+                    </h3>
+                    <p class="text-sm-vw text-gray-300 leading-relaxed mb-[0.6vw]">
+                        Entrega fraudulenta de mercadería o actos que atenten contra intereses financieros de la empresa.
+                    </p>
+                    <div class="p-[0.6vw] bg-red-900/40 rounded text-sm-vw text-red-200 border border-red-700/30">
+                        <strong>Sanción:</strong> <strong>Visto Bueno para desvinculación inmediata</strong> sin indemnización.<br>
+                        <small>Art. 32, Numeral 8 - Reglamento Interno</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: CIERRE -->
+        <div class="slide" style="background: linear-gradient(135deg, #050B14 0%, #001A3F 100%);">
+            <div class="flex-grow flex flex-col items-center justify-center text-center">
+                <i class="fa-solid fa-check-circle text-5xl-vw text-unicomer-cyan mb-[1.2vw]"></i>
+                
+                <h2 class="text-3xl-vw font-bold text-white font-heading mb-[1vw]">
+                    Procedimiento Completamente<br>Documentado
+                </h2>
+
+                <p class="text-xl-vw font-light text-gray-400 max-w-[70%] mb-[2vw]">
+                    "La excelencia en gestión institucional radica en la trazabilidad integral y blindaje del control interno en cada transacción."
+                </p>
+
+                <div class="glass-panel px-[2vw] py-[0.8vw] inline-block">
+                    <p class="text-base-vw text-white font-bold tracking-widest">
+                        UNICOMER ECUADOR S.A. • DESDE 2022
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTROLES DE NAVEGACIÓN -->
+        <div class="nav-controls">
+            <button class="nav-btn" onclick="prevSlide()">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div class="flex gap-[0.3vw]" id="progress-dots"></div>
+            <button class="nav-btn" onclick="nextSlide()">
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+
+    function showSlide(n) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[n].classList.add('active');
+        updateProgressDots();
+        updateNavButtons();
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        showSlide(currentSlide);
+    }
+
+    function updateProgressDots() {
+        const dotsContainer = document.getElementById('progress-dots');
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.className = `progress-dot ${i === currentSlide ? 'active' : ''}`;
+            dot.onclick = () => {
+                currentSlide = i;
+                showSlide(currentSlide);
+            };
+            dotsContainer.appendChild(dot);
+        }
+    }
+
+    function updateNavButtons() {
+        document.querySelector('.nav-btn:nth-of-type(1)').style.opacity = currentSlide === 0 ? '0.3' : '1';
+        document.querySelector('.nav-btn:nth-of-type(1)').style.pointerEvents = currentSlide === 0 ? 'none' : 'auto';
+        document.querySelector('.nav-btn:nth-of-type(2)').style.opacity = currentSlide === totalSlides - 1 ? '0.3' : '1';
+        document.querySelector('.nav-btn:nth-of-type(2)').style.pointerEvents = currentSlide === totalSlides - 1 ? 'none' : 'auto';
+    }
+
+    function toggleFullscreen() {
+        const elem = document.querySelector('.slide-container');
+        if (!document.fullscreenElement) {
+            elem.requestFullscreen().catch(err => console.log(err));
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') nextSlide();
+        if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    showSlide(0);
+</script>
+
+</body>
+</html>
