@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentación: Ventas Institucionales</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .presentation-container {
+            width: 100%;
+            max-width: 960px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            aspect-ratio: 16/9;
+            padding: 60px;
+            background: linear-gradient(135deg, #003366 0%, #4682B4 100%);
+            color: white;
+            animation: slideIn 0.5s ease-in-out;
+            position: relative;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide-dark {
+            background: linear-gradient(135deg, #003366 0%, #1a1a4d 100%);
+        }
+
+        .slide-accent {
+            background: linear-gradient(135deg, #008080 0%, #20b2aa 100%);
+        }
+
+        .slide-light {
+            background: linear-gradient(135deg, #4682B4 0%, #87ceeb 100%);
+            color: #333;
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-size: 2.8em;
+            margin-bottom: 40px;
+            font-weight: bold;
+        }
+
+        h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.4em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            font-size: 1.3em;
+            margin-left: 40px;
+            line-height: 2;
+        }
+
+        li {
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 1.8em;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            background: #f4f7f9;
+            gap: 20px;
+        }
+
+        button {
+            background: #003366;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #005599;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            font-size: 1.1em;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #003366;
+            transition: width 0.3s;
+        }
+
+        .code-reference {
+            font-size: 1.2em;
+            opacity: 0.8;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .highlight {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 8px;
+            border-radius: 3px;
+        }
+
+        table {
+            width: 100%;
+            font-size: 0.9em;
+            margin: 20px 0;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+        }
+
+        th {
+            background: rgba(0,0,0,0.2);
+            font-weight: bold;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.15);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid rgba(255,255,255,0.5);
+        }
+
+        .card h4 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 1.1em;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="presentation-container">
+        <!-- SLIDE 1: Portada -->
+        <div class="slide active">
+            <h1>Manual de Procedimiento</h1>
+            <h2>Ventas Institucionales</h2>
+            <p class="subtitle">Código: SM.CA - PR.12.02 | Versión: 02 | Vigente desde: Julio del 2022</p>
+        </div>
+
+        <!-- SLIDE 2: Tabla de Contenido -->
+        <div class="slide slide-dark">
+            <h2>Tabla de Contenido</h2>
+            <div class="grid-2">
+                <ul>
+                    <li>Objetivo</li>
+                    <li>Alcance</li>
+                    <li>Responsabilidad</li>
+                    <li>Definiciones</li>
+                    <li>Reglas de Negocio</li>
+                </ul>
+                <ul>
+                    <li>Descripción del Procedimiento</li>
+                    <li>Actividad 1: Criterios</li>
+                    <li>Actividad 2: Generar Ventas</li>
+                    <li>Documentos Anexos</li>
+                    <li>Temas Relevantes</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: Objetivo -->
+        <div class="slide slide-accent">
+            <h2>Objetivo</h2>
+            <p>Establecer y describir los <span class="highlight">lineamientos operativos</span> de las ventas de mercadería a instituciones (persona jurídica) para:</p>
+            <ul>
+                <li>Colaboradores de la institución</li>
+                <li>Consumo propio de la institución</li>
+            </ul>
+        </div>
+
+        <!-- SLIDE 4: Alcance y Responsabilidad -->
+        <div class="slide slide-light">
+            <h2>Alcance y Responsabilidad</h2>
+            <div class="grid-2">
+                <div>
+                    <h3>Áreas Involucradas</h3>
+                    <ul>
+                        <li>Ventas</li>
+                        <li>Crédito</li>
+                        <li>Cobros</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Responsables</h3>
+                    <ul>
+                        <li>Analista Comercial Supervisor</li>
+                        <li>Ejecutivo de Ventas</li>
+                        <li>Jefes de Tienda</li>
+                        <li>Jefe de Crédito</li>
+                        <li>Supervisores de Crédito</li>
+                        <li>Analistas de Crédito</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: Definiciones Clave -->
+        <div class="slide">
+            <h2>Definiciones Clave</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h4>Tipo de Convenio</h4>
+                    <p>Clasificación otorgada a la empresa (cliente), en base a la que se determina los documentos requeridos para la venta.</p>
+                </div>
+                <div class="card">
+                    <h4>Garante Solidario</h4>
+                    <p>La institución es responsable de la deuda adquirida ante Unicomer de Ecuador S.A.</p>
+                </div>
+                <div class="card">
+                    <h4>Agente de Retención</h4>
+                    <p>La institución es responsable de retener y consolidar los valores que se pagarán a Unicomer.</p>
+                </div>
+                <div class="card">
+                    <h4>TXC</h4>
+                    <p>Cuota similar a la tarjeta de crédito.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: Reglas de Negocio (1/2) -->
+        <div class="slide slide-dark">
+            <h2>Reglas de Negocio</h2>
+            <ul>
+                <li>✓ Toda excepción requiere autorización de <span class="highlight">Gerencia de Ventas</span> con visto bueno de <span class="highlight">Gerencia General</span></li>
+                <li>✓ Todas las cadenas de Unicomer están autorizadas para realizar ventas institucionales</li>
+                <li>✓ Aplica a mercadería <span class="highlight">nueva y seminueva (Ofertón)</span></li>
+                <li>✓ Todo convenio debe registrarse en el sistema <span class="highlight">SIAR</span></li>
+            </ul>
+        </div>
+
+        <!-- SLIDE 7: Reglas de Negocio (2/2) -->
+        <div class="slide slide-dark">
+            <h2>Reglas de Negocio (continuación)</h2>
+            <ul>
+                <li>✓ Vigencia máxima de convenio: <span class="highlight">1 AÑO</span></li>
+                <li style="margin-left: 20px; font-size: 1.1em; opacity: 0.9;">→ Excepciones aprobadas por Gerencia de Crédito y Cobros</li>
+                <li>✓ Toda venta debe generarse en SIAR a través del canal <span class="highlight">INSTITUCIÓN</span></li>
+                <li style="margin-left: 20px; font-size: 1.1em; opacity: 0.9;">→ Si no, debe anularse inmediatamente</li>
+            </ul>
+        </div>
+
+        <!-- SLIDE 8: Flujo General del Procedimiento -->
+        <div class="slide slide-accent">
+            <h2>Flujo General del Procedimiento</h2>
+            <div style="display: flex; justify-content: space-around; align-items: center; font-size: 1.3em;">
+                <div style="text-align: center;">
+                    <div style="font-size: 2em; margin-bottom: 10px;">📋</div>
+                    <p>1. Definir tipo de negociación</p>
+                </div>
+                <div style="font-size: 2em;">→</div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2em; margin-bottom: 10px;">📄</div>
+                    <p>2. Recolectar documentos</p>
+                </div>
+                <div style="font-size: 2em;">→</div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2em; margin-bottom: 10px;">✅</div>
+                    <p>3. Registrar en SIAR</p>
+                </div>
+                <div style="font-size: 2em;">→</div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2em; margin-bottom: 10px;">💰</div>
+                    <p>4. Generar venta</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px; font-size: 1.1em;">
+                ↓<br>
+                🔍 Seguimiento y Monitoreo de Pagos
+            </div>
+        </div>
+
+        <!-- SLIDE 9: Actividad 1 - Establecer Criterios (Parte 1) -->
+        <div class="slide slide-light">
+            <h2>Actividad 1: Establecer Criterios (1/3)</h2>
+            <h3>Tareas Iniciales</h3>
+            <ul style="font-size: 1.2em;">
+                <li><strong>Seleccionar tipo de negociación:</strong> Institución elige el plan según SM.CA - PR12.OA01</li>
+                <li><strong>Informar requisitos:</strong> Se notifican requisitos mínimos (Anexo 2). Para Pequeños Negocios se adjunta SM.CA - PR12.FR01 (Anexo 3)</li>
+                <li><strong>Entregar documentos:</strong> Institución envía todos los documentos solicitados</li>
+            </ul>
+        </div>
+
+        <!-- SLIDE 10: Actividad 1 - Establecer Criterios (Parte 2) -->
+        <div class="slide slide-light">
+            <h2>Actividad 1: Establecer Criterios (2/3)</h2>
+            <h3>Validación y Registro</h3>
+            <ul style="font-size: 1.2em;">
+                <li><strong>Validar documentos:</strong> Se verifica completitud, firmas y datos en Superintendencia de Compañías y SRI</li>
+                <li><strong>Registrar institución:</strong> Ingresa información en SIAR (Menú Ventas Institucionales). Registra % descuento según plan</li>
+                <li><strong>Validar registro:</strong> Jefe de Crédito valida Buró, páginas de control y Representante Legal</li>
+            </ul>
+        </div>
+
+        <!-- SLIDE 11: Actividad 1 - Crear Cupo -->
+        <div class="slide slide-light">
+            <h2>Actividad 1: Establecer Criterios (3/3)</h2>
+            <h3>Creación de Cupo</h3>
+            <table>
+                <tr>
+                    <th>Monto</th>
+                    <th>Autorizado por</th>
+                    <th>Restricción</th>
+                </tr>
+                <tr>
+                    <td>Hasta USD $5,000</td>
+                    <td>Supervisor o Jefe de Crédito</td>
+                    <td>Solo sin entrega de mercadería</td>
+                </tr>
+                <tr>
+                    <td>Hasta USD $15,000</td>
+                    <td>Jefe de Crédito</td>
+                    <td>Sin restricción</td>
+                </tr>
+                <tr>
+                    <td>Mayor a USD $15,000</td>
+                    <td>Gerencia de Crédito y Cobros</td>
+                    <td>Requiere aprobación ejecutiva</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- SLIDE 12: Actividad 2 - Generar Ventas (Parte 1) -->
+        <div class="slide">
+            <h2>Actividad 2: Generar Ventas (1/2)</h2>
+            <h3>Proceso de Venta</h3>
+            <ul>
+                <li><strong>Entregar cotización:</strong> Se envía por correo en formato SM.CA – PR12.FR05 (Anexo 7)</li>
+                <li><strong>Generar solicitud de compra (Contado):</strong> En SIAR, seleccionar canal INSTITUCIONES, institución y plazo</li>
+                <li><strong>Generar orden de compra:</strong> Institución envía orden firmada. Si no tiene formato, se entrega SM.CA – PR12.FR06 (Anexo 8)</li>
+            </ul>
+        </div>
+
+        <!-- SLIDE 13: Actividad 2 - Generar Ventas (Parte 2) -->
+        <div class="slide">
+            <h2>Actividad 2: Generar Ventas (2/2)</h2>
+            <h3>Finalización</h3>
+            <ul>
+                <li><strong>Generar solicitud de compra y crédito:</strong> Se genera en SIAR la solicitud completa</li>
+                <li><strong>Validar crédito:</strong> Jefe de Crédito revisa y aprueba</li>
+                <li><strong>Generar factura:</strong> Sistema genera automáticamente la factura de venta institucional</li>
+                <li><strong>Entregar mercadería:</strong> Según términos de pago acordados</li>
+            </ul>
+        </div>
+
+        <!-- SLIDE 14: Documentos Anexos -->
+        <div class="slide slide-dark">
+            <h2>Documentos Anexos Principales</h2>
+            <div class="grid-3">
+                <div class="card">
+                    <h4>Anexo 1</h4>
+                    <p>Planes Institucionales</p>
+                </div>
+                <div class="card">
+                    <h4>Anexo 2</h4>
+                    <p>Requisitos Mínimos</p>
+                </div>
+                <div class="card">
+                    <h4>Anexo 3</h4>
+                    <p>Formato Pequeños Negocios</p>
+                </div>
+                <div class="card">
+                    <h4>Anexo 4</h4>
+                    <p>Convenio Colaboradores</p>
+                </div>
+                <div class="card">
+                    <h4>Anexo 5</h4>
+                    <p>Firmas Responsables</p>
+                </div>
+                <div class="card">
+                    <h4>Anexo 6</h4>
+                    <p>Contrato de Compraventa</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 15: Información de Contacto -->
+        <div class="slide slide-accent">
+            <h2>Puntos Clave a Recordar</h2>
+            <ul style="font-size: 1.4em;">
+                <li>📌 Todas las ventas deben registrarse en <span class="highlight">SIAR</span></li>
+                <li>📌 Canal obligatorio: <span class="highlight">INSTITUCIÓN</span></li>
+                <li>📌 Vigencia máxima: <span class="highlight">1 AÑO</span></li>
+                <li>📌 Excepciones requieren aprobación de <span class="highlight">Gerencia General</span></li>
+                <li>📌 Documentación completa y validada es crítica</li>
+            </ul>
+        </div>
+
+        <!-- Controles de Navegación -->
+        <div class="controls">
+            <button id="prevBtn" onclick="changeSlide(-1)">← Anterior</button>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <span class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">15</span></span>
+            <button id="nextBtn" onclick="changeSlide(1)">Siguiente →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = document.querySelectorAll('.slide').length;
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            
+            if (n > totalSlides) currentSlide = totalSlides;
+            if (n < 1) currentSlide = 1;
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide - 1].classList.add('active');
+            
+            document.getElementById('currentSlide').textContent = currentSlide;
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+            
+            const progress = (currentSlide / totalSlides) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function changeSlide(n) {
+            currentSlide += n;
+            showSlide(currentSlide);
+        }
+
+        // Navegación con teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        });
+
+        showSlide(currentSlide);
+    </script>
+
+</body>
+</html>
