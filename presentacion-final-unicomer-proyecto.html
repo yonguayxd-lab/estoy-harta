@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Final: Proceso de Ventas Institucionales - Unicomer</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#0056B3',
+                            dark: '#001A3F',
+                            light: '#38BDF8',
+                            magenta: '#E6007E'
+                        },
+                        ui: {
+                            base: '#050B14',
+                            surface: '#0E1726',
+                            elevated: '#1E293B'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #020617;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 56.25vw;
+            max-height: 100vh;
+            max-width: 177.78vh;
+            position: relative;
+            background-color: #050B14;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.9);
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            transform: scale(0.98);
+            display: flex;
+            flex-direction: column;
+            padding: 3vw 4.5vw 6vw 4.5vw;
+            z-index: 1;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+            z-index: 10;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 80% 20%, rgba(0, 86, 179, 0.15) 0%, transparent 60%),
+                        radial-gradient(circle at 20% 80%, rgba(230, 0, 126, 0.08) 0%, transparent 60%);
+            background-color: #050B14;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide.active .animate-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        h1, h2, h3, h4, .font-heading { font-family: 'Outfit', sans-serif; }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #38BDF8 0%, #E6007E 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide-title {
+            font-size: 2.2vw;
+            font-weight: 700;
+            margin-bottom: 1.2vw;
+            display: flex;
+            align-items: center;
+            gap: 0.8vw;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 0.6vw;
+            color: #fff;
+            text-transform: uppercase;
+        }
+        
+        .slide-title i { color: #E6007E; }
+
+        .glass-panel {
+            background: rgba(14, 23, 38, 0.65);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 0.8vw;
+            padding: 1.2vw;
+            color: #F9FAFB;
+        }
+
+        .process-node {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .process-node::after {
+            content: '\f061';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: -0.6vw;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.15);
+            font-size: 0.8vw;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        .process-node:last-child::after {
+            display: none;
+        }
+
+        .process-node:hover, .process-node.selected-node {
+            border-color: #E6007E;
+            background: rgba(230, 0, 126, 0.09);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(230, 0, 126, 0.25);
+        }
+
+        .process-node.selected-node::after {
+            color: #E6007E;
+        }
+
+        .nav-controls {
+            position: absolute;
+            bottom: 1.8vw;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 4.5vw;
+            z-index: 50;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            width: 2.8vw;
+            height: 2.8vw;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1vw;
+            backdrop-filter: blur(8px);
+        }
+
+        .nav-btn:hover { 
+            background: #E6007E; 
+            border-color: #E6007E; 
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(230, 0, 126, 0.4);
+        }
+        
+        .progress-container {
+            display: flex;
+            gap: 0.5vw;
+        }
+
+        .progress-dot {
+            width: 0.55vw;
+            height: 0.55vw;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .progress-dot.active {
+            background: #E6007E;
+            transform: scale(1.4);
+            box-shadow: 0 0 10px rgba(230, 0, 126, 0.6);
+        }
+
+        #btn-fullscreen {
+            position: absolute;
+            top: 1.5vw;
+            right: 1.5vw;
+            z-index: 100;
+        }
+
+        .text-xl-vw { font-size: 1.1vw; }
+        .text-2xl-vw { font-size: 1.4vw; }
+        .text-3xl-vw { font-size: 1.7vw; }
+        .text-4xl-vw { font-size: 2.2vw; }
+        .text-5xl-vw { font-size: 3.2vw; }
+        .text-6xl-vw { font-size: 4.2vw; }
+
+        .badge-owner {
+            font-size: 0.7vw;
+            padding: 0.15vw 0.4vw;
+            border-radius: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            width: fit-content;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background: rgba(56, 189, 248, 0.08);
+            color: #38BDF8;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-container">
+
+    <button onclick="toggleFullScreen()" id="btn-fullscreen" class="w-[2.6vw] h-[2.6vw] bg-white/5 hover:bg-white/10 border border-white/10 rounded-full flex items-center justify-center text-white text-[1vw] backdrop-blur-md transition-all cursor-pointer shadow-lg">
+        <i class="fa-solid fa-expand" id="icon-fullscreen"></i>
+    </button>
+
+    <!-- SLIDE 1: PORTADA -->
+    <div class="slide active" id="slide-0" style="background: linear-gradient(135deg, #050B14 0%, #001A3F 100%);">
+        <div class="absolute top-[3vw] left-[4.5vw] z-20 animate-up">
+            <div class="flex items-center gap-[1vw] bg-white/[0.02] border border-white/10 px-[1.5vw] py-[0.6vw] rounded-full backdrop-blur-md">
+                <div class="flex items-center font-heading font-bold tracking-wider text-[1.2vw] text-white">
+                    <span>UNI</span><span class="text-brand-magenta">COMER</span>
+                    <span class="text-brand-light font-light text-[0.9vw] ml-[0.5vw] border-l border-white/20 pl-[0.5vw]">ECUADOR</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col justify-center h-full max-w-[75vw] pl-[2vw] mt-[2vw]">
+            <div class="inline-flex items-center gap-[0.8vw] bg-brand-magenta/10 border border-brand-magenta/30 px-[1.2vw] py-[0.4vw] rounded-full mb-[1.5vw] w-fit animate-up delay-1">
+                <i class="fa-solid fa-graduation-cap text-brand-magenta text-[0.9vw]"></i>
+                <span class="text-[0.8vw] font-bold tracking-[0.25em] text-brand-magenta uppercase">Proyecto de Administración de Procesos</span>
+            </div>
+            
+            <h1 class="text-5xl-vw font-extrabold leading-[1.1] mb-[1.5vw] text-white font-heading animate-up delay-1">
+                Análisis y Mejora de<br>
+                <span class="bg-gradient-to-r from-brand-light to-brand-magenta bg-clip-text text-transparent">Ventas Institucionales</span>
+            </h1>
+            
+            <p class="text-2xl-vw font-light text-gray-400 border-l-2 border-brand-magenta pl-[1.5vw] mt-[1vw] leading-relaxed animate-up delay-2">
+                Optimización de tiempos de respuesta y eficiencia operativa bajo lineamientos estratégicos ISO 9001.
+            </p>
+            
+            <div class="mt-[2.5vw] text-gray-500 text-xl-vw space-y-[0.3vw] animate-up delay-3">
+                <div class="text-white/80 font-medium text-[0.95vw]">Universidad Católica de Santiago de Guayaquil</div>
+                <div class="text-gray-400 text-[0.85vw]">Estudiantes: C. Chiriboga, J. Gómez, A. Holguín, B. Sánchez, P. Sumba, M. Véliz</div>
+                <div class="text-gray-500 text-[0.8vw]">Docente: Ing. Ind. José Pérez Villamar, Mgs. &bull; 9 de Junio de 2026</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: INTRODUCCIÓN -->
+    <div class="slide" id="slide-1">
+        <h2 class="slide-title animate-up"><i class="fa-solid fa-circle-info"></i> Introducción y Diagnóstico del Canal</h2>
+        <div class="flex-grow flex items-center justify-between gap-[3vw] mt-[0.5vw] animate-up delay-1">
+            <div class="w-[50%] space-y-[1vw]">
+                <p class="text-[1.15vw] text-slate-300 leading-relaxed text-justify">
+                    Grupo Unicomer gestiona la comercialización masiva de electrodomésticos y tecnología dirigida a instituciones públicas y privadas. Este proceso se estructura en tres fases: <strong>calificación, ejecución y seguimiento</strong>.
+                </p>
+                <div class="bg-red-500/10 border-l-[0.3vw] border-brand-magenta p-[1vw] rounded-r-lg">
+                    <h4 class="text-[1vw] font-bold text-white mb-[0.2vw] uppercase tracking-wide">Problemática Central:</h4>
+                    <p class="text-[0.95vw] text-slate-400 leading-relaxed">
+                        Se han identificado cuellos de botella y demoras críticas asociadas a restricciones de inventario, demoras en el análisis de crédito y validaciones sucesivas redundantes.
+                    </p>
+                </div>
+            </div>
+            <div class="w-[46%] grid grid-cols-2 gap-[1vw]">
+                <div class="glass-panel border-slate-800">
+                    <i class="fa-solid fa-clock-three text-brand-light text-2xl-vw mb-[0.4vw]"></i>
+                    <h4 class="font-bold text-white text-[1vw] mb-[0.2vw]">Tiempos de Respuesta</h4>
+                    <p class="text-[0.85vw] text-slate-400">Retrasos impactan directamente en la satisfacción de los clientes corporativos.</p>
+                </div>
+                <div class="glass-panel border-slate-800">
+                    <i class="fa-solid fa-shield-halved text-brand-magenta text-2xl-vw mb-[0.4vw]"></i>
+                    <h4 class="font-bold text-white text-[1vw] mb-[0.2vw]">Coordinación</h4>
+                    <p class="text-[0.85vw] text-slate-400">Necesidad de optimizar la interacción entre Ventas, Crédito y Cobros.</p>
+                </div>
+                <div class="glass-panel border-slate-800 col-span-2">
+                    <div class="text-[0.8vw] text-brand-light font-bold uppercase tracking-wider mb-[0.2vw]">Visión Estratégica 2026</div>
+                    <p class="text-[0.9vw] text-slate-300 italic">"Consolidar un modelo de gestión por procesos basado en ISO 9001, orientado a blindar la resiliencia operativa del canal."</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: SUBPROCESO - 6 FASES -->
+    <div class="slide" id="slide-2">
+        <h2 class="slide-title animate-up"><i class="fa-solid fa-diagram-project"></i> Subproceso Crítico: Generar Ventas Institucionales</h2>
+        <p class="text-[0.95vw] text-gray-400 mb-[0.8vw] -mt-[0.5vw] animate-up delay-1">Selecciona cualquier etapa del flujo para auditar sus parámetros de operación reales en tiempo de ejecución:</p>
+        
+        <div class="flex-grow flex flex-col justify-between gap-[1vw]">
+            
+            <div class="grid grid-cols-6 gap-[0.8vw] animate-up delay-1">
+                
+                <div class="process-node glass-panel border-brand-light/40 flex flex-col justify-between p-[0.8vw] min-h-[6.5vw] selected-node" onclick="changeDashboardView(1, this)">
+                    <div>
+                        <div class="text-brand-light font-bold text-[0.72vw] uppercase tracking-wider mb-[0.1vw]">Fase 01</div>
+                        <h4 class="font-heading font-bold text-[0.92vw] leading-tight text-white">Entregar Cotización</h4>
+                    </div>
+                    <div class="badge-owner bg-brand-blue/30 text-brand-light border border-brand-blue/50">
+                        Ejecutivo Ventas
+                    </div>
+                </div>
+
+                <div class="process-node glass-panel flex flex-col justify-between p-[0.8vw] min-h-[6.5vw]" onclick="changeDashboardView(2, this)">
+                    <div>
+                        <div class="text-gray-400 font-bold text-[0.72vw] uppercase tracking-wider mb-[0.1vw]">Fase 02</div>
+                        <h4 class="font-heading font-bold text-[0.92vw] leading-tight text-white">Solicitud Compra (Contado)</h4>
+                    </div>
+                    <div class="badge-owner bg-slate-800 text-gray-300 border border-slate-700">
+                        Jefe Tienda/Vend.
+                    </div>
+                </div>
+
+                <div class="process-node glass-panel flex flex-col justify-between p-[0.8vw] min-h-[6.5vw]" onclick="changeDashboardView(3, this)">
+                    <div>
+                        <div class="text-brand-magenta font-bold text-[0.72vw] uppercase tracking-wider mb-[0.1vw]">Fase 03</div>
+                        <h4 class="font-heading font-bold text-[0.92vw] leading-tight text-white">Generar Orden Compra</h4>
+                    </div>
+                    <div class="badge-owner bg-brand-magenta/20 text-brand-magenta border border-brand-magenta/30">
+                        Institución
+                    </div>
+                </div>
+
+                <div class="process-node glass-panel flex flex-col justify-between p-[0.8vw] min-h-[6.5vw]" onclick="changeDashboardView(4, this)">
+                    <div>
+                        <div class="text-gray-400 font-bold text-[0.72vw] uppercase tracking-wider mb-[0.1vw]">Fase 04</div>
+                        <h4 class="font-heading font-bold text-[0.92vw] leading-tight text-white">Solicitud Compra y Crédito</h4>
+                    </div>
+                    <div class="badge-owner bg-slate-800 text-gray-300 border border-slate-700">
+                        Jefe Tienda/Vend.
+                    </div>
+                </div>
+
+                <div class="process-node glass-panel flex flex-col justify-between p-[0.8vw] min-h-[6.5vw]" onclick="changeDashboardView(5, this)">
+                    <div>
+                        <div class="text-amber-400 font-bold text-[0.72vw] uppercase tracking-wider mb-[0.1vw]">Fase 05</div>
+                        <h4 class="font-heading font-bold text-[0.92vw] leading-tight text-white">Analizar Crédito</h4>
+                    </div>
+                    <div class="badge-owner bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                        Analista/J. Tienda
+                    </div>
+                </div>
+
+                <div class="process-node glass-panel flex flex-col justify-between p-[0.8vw] min-h-[6.5vw]" onclick="changeDashboardView(6, this)">
+                    <div>
+                        <div class="text-green-400 font-bold text-[0.72vw] uppercase tracking-wider mb-[0.1vw]">Fase 06</div>
+                        <h4 class="font-heading font-bold text-[0.92vw] leading-tight text-white">Generar Factura</h4>
+                    </div>
+                    <div class="badge-owner bg-green-500/10 text-green-400 border border-green-500/20">
+                        Jefe Tienda/Vend.
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="glass-panel border-slate-800 bg-slate-950/50 p-[1.2vw] flex-grow shadow-inner" id="dashboard-details-box">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-[0.5vw] mb-[0.8vw]">
+                    <h3 class="text-2xl-vw font-bold font-heading text-white flex items-center gap-[0.6vw]" id="lbl-task-title">
+                        <i class="fa-solid fa-file-invoice-dollar text-brand-light"></i> Tarea: Entregar Cotización
+                    </h3>
+                    <div class="px-[1vw] py-[0.2vw] bg-brand-magenta/10 text-brand-magenta font-heading font-bold text-xl-vw rounded border border-brand-magenta/20 shadow-sm" id="lbl-task-owner">
+                        Encargado: Ejecutivo de Ventas
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-[1.5vw]">
+                    <div class="space-y-[0.6vw]">
+                        <div class="p-[0.6vw] bg-slate-900/40 rounded-lg border border-slate-800/50">
+                            <span class="text-brand-light font-bold block text-[0.9vw] uppercase tracking-wide"><i class="fa-solid fa-gears mr-[0.3vw]"></i> ¿Cómo se hace?</span>
+                            <p class="text-[0.95vw] text-slate-300 mt-[0.1vw] leading-relaxed" id="lbl-task-how">Toda cotización tiene que ser enviada por correo electrónico utilizando el formato oficializado SM.CA – PR12.FR05 (Anexo 7) para la validación transparente de montos.</p>
+                        </div>
+                        <div class="p-[0.6vw] bg-slate-900/40 rounded-lg border border-slate-800/50">
+                            <span class="text-brand-light font-bold block text-[0.9vw] uppercase tracking-wide"><i class="fa-solid fa-clock mr-[0.3vw]"></i> ¿Cuándo se hace?</span>
+                            <p class="text-[0.95vw] text-slate-300 mt-[0.1vw] leading-relaxed" id="lbl-task-when">Una vez completado el registro reglamentario de la institución en SIAR y contando con la debida aprobación del cupo inicial.</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col h-full">
+                        <div class="p-[1vw] bg-brand-blue/5 rounded-lg border border-brand-blue/20 flex-grow flex flex-col justify-center">
+                            <span class="text-white font-heading font-bold block text-[1vw] uppercase tracking-wide mb-[0.2vw]"><i class="fa-solid fa-circle-question text-brand-magenta mr-[0.3vw]"></i> ¿Por qué se hace?</span>
+                            <p class="text-[1vw] text-slate-200 leading-relaxed italic" id="lbl-task-why">Para confirmar formalmente los precios institucionales asignados a la persona jurídica, garantizando la transparencia comercial ante la auditoría interna.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SLIDE 4: SIPOC -->
+    <div class="slide" id="slide-3">
+        <h2 class="slide-title animate-up"><i class="fa-solid fa-arrows-spin"></i> Visión Transversal: Diagrama SIPOC</h2>
+        <div class="flex-grow flex flex-col justify-center animate-up delay-1">
+            <div class="grid grid-cols-5 gap-[1vw] text-center">
+                <div class="glass-panel border-slate-800 bg-slate-900/20">
+                    <div class="font-bold text-brand-light text-xl-vw uppercase border-b border-slate-700 pb-[0.3vw] mb-[0.6vw]">Suppliers</div>
+                    <ul class="text-[0.85vw] text-slate-300 space-y-[0.4vw] text-left">
+                        <li>&bull; Fabricantes Aliados</li>
+                        <li>&bull; Área Comercial</li>
+                        <li>&bull; Área de Inventarios</li>
+                        <li>&bull; Área Financiera</li>
+                    </ul>
+                </div>
+                <div class="glass-panel border-slate-800 bg-slate-900/20">
+                    <div class="font-bold text-brand-magenta text-xl-vw uppercase border-b border-slate-700 pb-[0.3vw] mb-[0.6vw]">Inputs</div>
+                    <ul class="text-[0.85vw] text-slate-300 space-y-[0.4vw] text-left">
+                        <li>&bull; Catálogo de Productos</li>
+                        <li>&bull; Base de Clientes</li>
+                        <li>&bull; Disponibilidad de Stock</li>
+                        <li>&bull; Políticas de Crédito</li>
+                    </ul>
+                </div>
+                <div class="glass-panel border-brand-light/20 bg-brand-light/5">
+                    <div class="font-bold text-white text-xl-vw uppercase border-b border-brand-light/30 pb-[0.3vw] mb-[0.6vw]">Process</div>
+                    <ul class="text-[0.85vw] text-white space-y-[0.4vw] text-left">
+                        <li>1. Identificación</li>
+                        <li>2. Levantamiento Req.</li>
+                        <li>3. Cotización</li>
+                        <li>4. Evaluación Crédito</li>
+                    </ul>
+                </div>
+                <div class="glass-panel border-slate-800 bg-slate-900/20">
+                    <div class="font-bold text-brand-light text-xl-vw uppercase border-b border-slate-700 pb-[0.3vw] mb-[0.6vw]">Outputs</div>
+                    <ul class="text-[0.85vw] text-slate-300 space-y-[0.4vw] text-left">
+                        <li>&bull; Oportunidad comercial</li>
+                        <li>&bull; Cotización enviada</li>
+                        <li>&bull; Crédito validado</li>
+                        <li>&bull; Contrato / Factura</li>
+                    </ul>
+                </div>
+                <div class="glass-panel border-slate-800 bg-slate-900/20">
+                    <div class="font-bold text-brand-magenta text-xl-vw uppercase border-b border-slate-700 pb-[0.3vw] mb-[0.6vw]">Customers</div>
+                    <ul class="text-[0.85vw] text-slate-300 space-y-[0.4vw] text-left">
+                        <li>&bull; Arca Continental</li>
+                        <li>&bull; Banco Guayaquil</li>
+                        <li>&bull; AGRIPAC / ANETA</li>
+                        <li>&bull; Oro Verde / Siegfried</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: MUDAS LEAN -->
+    <div class="slide" id="slide-4">
+        <h2 class="slide-title animate-up"><i class="fa-solid fa-trash-can"></i> Diagnóstico Lean: Inventario de Mudas (Ineficiencias)</h2>
+        <div class="flex-grow flex flex-col justify-center animate-up delay-1">
+            <div class="glass-panel overflow-hidden border-slate-800 p-0">
+                <table class="text-[0.9vw]">
+                    <thead>
+                        <tr class="border-b border-slate-800">
+                            <th class="p-[0.8vw] text-left w-[20%]">Muda (Desperdicio)</th>
+                            <th class="p-[0.8vw] text-left">Evidencia Detectada en el Proceso</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-slate-300">
+                        <tr class="border-b border-slate-800/40">
+                            <td class="p-[0.8vw] font-bold text-white"><i class="fa-solid fa-hourglass-half text-brand-magenta mr-[0.4vw]"></i> Espera</td>
+                            <td class="p-[0.8vw]">Demoras críticas en el análisis de crédito, retrasos de validaciones y tiempos excesivos para confirmar inventarios en bodegas.</td>
+                        </tr>
+                        <tr class="border-b border-slate-800/40">
+                            <td class="p-[0.8vw] font-bold text-white"><i class="fa-solid fa-gears text-brand-light mr-[0.4vw]"></i> Sobreprocesamiento</td>
+                            <td class="p-[0.8vw]">Revisiones sucesivas y firmas redundantes entre Ventas Institucionales, Crédito, Inventarios y áreas administrativas.</td>
+                        </tr>
+                        <tr class="border-b border-slate-800/40">
+                            <td class="p-[0.8vw] font-bold text-white"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-[0.4vw]"></i> Defectos</td>
+                            <td class="p-[0.8vw]">Expedientes con documentación incompleta, errores en las órdenes de compra emitidas y correcciones manuales que obligan a realizar reprocesos.</td>
+                        </tr>
+                        <tr>
+                            <td class="p-[0.8vw] font-bold text-white"><i class="fa-solid fa-arrows-left-right text-slate-400 mr-[0.4vw]"></i> Movimientos</td>
+                            <td class="p-[0.8vw]">Intercambio excesivo de correos electrónicos, llamadas telefónicas y seguimiento manual informal para rastrear el estatus del crédito.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: ALINEACIÓN NORMATIVA -->
+    <div class="slide" id="slide-5">
+        <h2 class="slide-title animate-up"><i class="fa-solid fa-shield-halved"></i> Alineación Normativa y Visión de Futuro</h2>
+        <div class="flex-grow grid grid-cols-2 gap-[2vw] items-stretch mt-[0.5vw] animate-up delay-1">
+            <div class="glass-panel border-slate-800 flex flex-col justify-between">
+                <div>
+                    <h3 class="font-heading font-bold text-xl-vw text-brand-light mb-[0.5vw] border-b border-slate-800 pb-[0.3vw]">
+                        <i class="fa-solid fa-circle-check"></i> Cumplimiento ISO 9001:2015
+                    </h3>
+                    <p class="text-[1vw] text-slate-300 leading-relaxed text-justify">
+                        El procedimiento actual define con claridad actividades fijas, delimita responsabilidades por puesto, exige registros en el sistema informático <strong>SIAR</strong> y salvaguarda la trazabilidad de los expedientes de facturación.
+                    </p>
+                </div>
+                <div class="bg-brand-blue/10 p-[0.6vw] rounded text-[0.85vw] text-brand-light border border-brand-blue/20">
+                    Alineado a los principios de estandarización documental.
+                </div>
+            </div>
+            <div class="glass-panel border-brand-magenta/30 bg-brand-magenta/[0.02] flex flex-col justify-between">
+                <div>
+                    <h3 class="font-heading font-bold text-xl-vw text-brand-magenta mb-[0.5vw] border-b border-slate-800 pb-[0.3vw]">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Brechas e ISO 9001:2026
+                    </h3>
+                    <p class="text-[1vw] text-slate-300 leading-relaxed text-justify">
+                        <strong>Falta de Resiliencia Operativa:</strong> El flujo actual presenta una dependencia absoluta del software de la plataforma SIAR. No existen mecanismos de contingencia formales ante parálisis o fallas informáticas.
+                    </p>
+                </div>
+                <div class="bg-brand-magenta/10 p-[0.6vw] rounded text-[0.85vw] text-brand-magenta border border-brand-magenta/20">
+                    ISO 9001:2026 exige procesos digitales más adaptables y resilientes.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 7: MEJORAS PHVA -->
+    <div class="slide" id="slide-6">
+        <h2 class="slide-title animate-up"><i class="fa-solid fa-wand-magic-sparkles"></i> Propuestas de Mejora Continua (PHVA)</h2>
+        <div class="flex-grow flex flex-col justify-center space-y-[1vw] animate-up delay-1">
+            <div class="grid grid-cols-2 gap-[1.5vw]">
+                <div class="glass-panel border-slate-800">
+                    <h4 class="font-bold text-white text-[1.1vw] mb-[0.3vw] flex items-center gap-[0.4vw]">
+                        <i class="fa-solid fa-cloud-arrow-up text-brand-light"></i> Continuidad y Resiliencia Operativa
+                    </h4>
+                    <p class="text-[0.95vw] text-slate-400 leading-relaxed">
+                        Inclusión de acciones de contingencia: habilitación de registros temporales autorizados ante caídas de la plataforma SIAR para erradicar parálisis comerciales.
+                    </p>
+                </div>
+                <div class="glass-panel border-slate-800">
+                    <h4 class="font-bold text-white text-[1.1vw] mb-[0.3vw] flex items-center gap-[0.4vw]">
+                        <i class="fa-solid fa-chart-pie text-brand-magenta"></i> Gobernanza por Indicadores KPI
+                    </h4>
+                    <p class="text-[0.95vw] text-slate-400 leading-relaxed">
+                        Revisiones trimestrales basadas en datos duros: monitoreo de tiempos de aprobación crediticia, tasas de rechazo documental e índice de satisfacción corporativo.
+                    </p>
+                </div>
+            </div>
+            <div class="p-[1vw] bg-slate-950 border border-slate-800 rounded-lg">
+                <span class="font-bold text-white text-[1vw] block mb-[0.3vw] uppercase tracking-wider text-brand-light">Resultados Esperados:</span>
+                <p class="text-[0.95vw] text-slate-300">
+                    Minimizar los retrasos operativos, robustecer la coordinación interdepartamental, acortar los tiempos de ciclo y elevar sustancialmente los niveles de servicio brindados a los clientes corporativos de Unicomer.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 8: RÉGIMEN DISCIPLINARIO -->
+    <div class="slide" id="slide-7">
+        <h2 class="slide-title animate-up"><i class="fa-solid fa-gavel"></i> Régimen Disciplinario Interno</h2>
+        <div class="flex-grow grid grid-cols-2 gap-[2vw] mt-[0.5vw] items-stretch animate-up delay-1">
+            <div class="bg-amber-600/[0.03] border-l-[4px] border-amber-500 p-[1.5vw] rounded-r-lg flex flex-col justify-between glass-panel">
+                <div>
+                    <h3 class="font-heading font-bold text-xl-vw text-amber-400 mb-[0.5vw] flex items-center gap-[0.4vw]">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Penalización por Falta Leve
+                    </h3>
+                    <p class="text-[0.95vw] text-slate-300 leading-relaxed">
+                        Saltarse los controles o las firmas del expediente de crédito se procesa bajo el Reglamento Interno (Art. 30, 33). La reincidencia aplica una multa directa de <strong>hasta el 10% de la remuneración mensual</strong> del colaborador responsable.
+                    </p>
+                </div>
+                <div class="text-[0.8vw] text-amber-400/80 italic border-t border-amber-500/10 pt-[0.4vw] mt-[0.8vw]">
+                    *Una tercera reincidencia en el mismo mes calendario se eleva a los efectos de una Falta Grave.
+                </div>
+            </div>
+            <div class="bg-red-600/[0.03] border-l-[4px] border-red-500 p-[1.5vw] rounded-r-lg flex flex-col justify-between glass-panel">
+                <div>
+                    <h3 class="font-heading font-bold text-xl-vw text-red-400 mb-[0.5vw] flex items-center gap-[0.4vw]">
+                        <i class="fa-solid fa-gavel"></i> Consecuencias de Falta Grave
+                    </h3>
+                    <p class="text-[0.95vw] text-slate-300 leading-relaxed mb-[0.5vw]">
+                        <strong>Art. 32 - Numeral 8:</strong> Entregas de mercadería de forma engañosa o fraudulenta que atenten de manera deliberada contra los intereses financieros o el patrimonio de la organización.
+                    </p>
+                    <div class="bg-black/40 p-[0.6vw] rounded border border-red-500/20 text-[0.9vw] text-red-300/90 leading-relaxed">
+                        <strong>Impacto Legal:</strong> Faculta formalmente a la compañía para procesar el trámite de <strong>Visto Bueno para desvinculación inmediata</strong> sin derecho a indemnización.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 9: CIERRE -->
+    <div class="slide" id="slide-8" style="background: linear-gradient(135deg, #050B14 0%, #001A3F 100%);">
+        <div class="flex-grow flex flex-col items-center justify-center text-center max-w-[75vw] mx-auto animate-up">
+            <i class="fa-solid fa-quote-left text-5xl-vw text-white/10 mb-[1vw]"></i>
+            
+            <h2 class="text-[2.3vw] font-light leading-snug text-slate-200 font-heading">
+                "La excelencia en la gestión del canal radica en asegurar la <strong class="font-bold text-brand-light bg-white/5 px-[0.8vw] py-[0.1vw] rounded border border-white/5">trazabilidad integral</strong> y el blindaje del control interno en cada transacción."
+            </h2>
+            
+            <div class="mt-[3vw] bg-white/[0.02] border border-white/10 px-[2.5vw] py-[1vw] rounded-full backdrop-blur-md shadow-2xl">
+                <p class="text-[1.1vw] font-bold tracking-[0.3em] text-slate-400 uppercase">
+                    Grupo Unicomer Ecuador &bull; Cierre de Sustentación
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTROLES DE NAVEGACIÓN -->
+    <div class="nav-controls">
+        <button class="nav-btn shadow-lg" onclick="prevSlide()" id="btn-prev" style="opacity: 0.3; pointer-events: none;">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <div class="progress-container bg-black/40 px-[1.2vw] py-[0.6vw] rounded-full backdrop-blur-md border border-white/10" id="dots-container"></div>
+        <button class="nav-btn shadow-lg" onclick="nextSlide()" id="btn-next">
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </div>
+
+</div>
+
+<script>
+    const processMatrix = {
+        1: {
+            title: '<i class="fa-solid fa-file-lines text-brand-light"></i> Tarea: Entregar Cotización',
+            owner: 'Encargado: Ejecutivo de Ventas',
+            how: 'Toda cotización tiene que ser enviada de manera formal por correo electrónico a la institución utilizando estrictamente el formato normado SM.CA – PR12.FR05 (Anexo 7).',
+            when: 'Inmediatamente después de que el registro de la institución compradora externa y el respectivo cupo han sido aprobados en sistema.',
+            why: 'Para confirmar de forma transparente y oficial los precios establecidos para la venta institucional, salvaguardando los márgenes comerciales.'
+        },
+        2: {
+            title: '<i class="fa-solid fa-desktop text-brand-light"></i> Tarea: Solicitud de Compra (Contado)',
+            owner: 'Encargado: Jefe de Tienda / Vendedor',
+            how: 'Se genera e ingresa la Solicitud de Compra directamente en el sistema informático SIAR, seleccionando obligatoriamente el canal INSTITUCIONES, la empresa y el plazo.',
+            when: 'Al momento de recibir la aceptación formal o confirmación técnica de la cotización comercial por parte de la entidad cliente.',
+            why: 'Estructurar y asentar la preventa dentro de la plataforma contable central de Unicomer para habilitar los flujos de facturación.'
+        },
+        3: {
+            title: '<i class="fa-solid fa-signature text-brand-magenta"></i> Tarea: Generar Orden de Compra',
+            owner: 'Encargado: Institución (Cliente)',
+            how: 'La institución cliente emite su documento formal de orden de compra debidamente firmado y sellado por su Representante Legal. Si carece de formato, se provee el modelo corporativo SM.CA – PR12.FR06 (Anexo 8).',
+            when: 'Una vez que la propuesta de precios y las condiciones comerciales descritas en la cotización inicial son aceptadas.',
+            why: 'Actúa como el respaldo legal, irrevocable e institucional que respalda y autoriza la generación del cargo comercial ante Unicomer.'
+        },
+        4: {
+            title: '<i class="fa-solid fa-credit-card text-brand-light"></i> Tarea: Solicitud de Compra y Crédito',
+            owner: 'Encargado: Jefe de Tienda / Vendedor',
+            how: 'Se genera de manera simultánea la Solicitud de Compra ligada a la Solicitud de Crédito en SIAR. En convenios Tipo C, basta digitalizar la cédula para la revisión del Analista.',
+            when: 'Al instante de ser recibida y validada físicamente la Orden de Compra oficial de la institución externa contratante.',
+            why: 'Vincular operativamente el pedido de bienes con el módulo de riesgos, disparando los flujos de evaluación de crédito automáticos.'
+        },
+        5: {
+            title: '<i class="fa-solid fa-magnifying-glass-chart text-amber-400"></i> Tarea: Analizar Crédito',
+            owner: 'Encargado: Analista de Crédito / Jefe Tienda',
+            how: 'Se evalúan exhaustivamente las condiciones de solvencia aplicando la matriz del Anexo 9 y corroborando estrictamente la vigencia anual máxima de 1 año del convenio base.',
+            when: 'Específicamente obligatorio cuando la modalidad comercial de venta institucional corresponde al Plan Colaboradores.',
+            why: 'Verificar la capacidad real de pago y buró crediticio de la cuenta corporativa, mitigando de forma integral la probabilidad de morosidad.'
+        },
+        6: {
+            title: '<i class="fa-solid fa-receipt text-green-400"></i> Tarea: Generar Factura',
+            owner: 'Encargado: Jefe de Tienda / Vendedor',
+            how: 'Se procesa la facturación en SIAR bajo el canal exclusivo "INSTITUCIÓN" y se despachan de inmediato los expedientes físicos completos (Órdenes, RUC, Facturas, Contratos) a Negociaciones.',
+            when: 'Cuando la solicitud de contado registra pago efectivo en caja o la solicitud de crédito cuenta con estado APROBADO por analistas.',
+            why: 'Asentar contable y tributariamente la transacción comercial, perfeccionando legalmente la venta y autorizando el despacho del inventario.'
+        }
+    };
+
+    function changeDashboardView(stepId, element) {
+        document.querySelectorAll('.process-node').forEach(node => {
+            node.classList.remove('selected-node', 'border-brand-light/40');
+        });
+
+        element.classList.add('selected-node');
+
+        const dataset = processMatrix[stepId];
+        const panelBox = document.getElementById('dashboard-details-box');
+        
+        panelBox.style.opacity = '0';
+        panelBox.style.transform = 'translateY(5px)';
+        
+        setTimeout(() => {
+            document.getElementById('lbl-task-title').innerHTML = dataset.title;
+            document.getElementById('lbl-task-owner').innerText = dataset.owner;
+            document.getElementById('lbl-task-how').innerText = dataset.how;
+            document.getElementById('lbl-task-when').innerText = dataset.when;
+            document.getElementById('lbl-task-why').innerText = dataset.why;
+            
+            panelBox.style.opacity = '1';
+            panelBox.style.transform = 'translateY(0)';
+        }, 150);
+    }
+
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    const dotsContainer = document.getElementById('dots-container');
+
+    for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('div');
+        dot.classList.add('progress-dot');
+        if (i === 0) dot.classList.add('active');
+        dot.onclick = () => goToSlide(i);
+        dotsContainer.appendChild(dot);
+    }
+    const dots = document.querySelectorAll('.progress-dot');
+
+    function updateUI() {
+        slides.forEach((slide, index) => {
+            if (index === currentSlide) {
+                slide.classList.add('active');
+            } else {
+                slide.classList.remove('active');
+            }
+        });
+
+        dots.forEach((dot, index) => {
+            if (index === currentSlide) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+
+        document.getElementById('btn-prev').style.opacity = currentSlide === 0 ? '0.3' : '1';
+        document.getElementById('btn-prev').style.pointerEvents = currentSlide === 0 ? 'none' : 'auto';
+        
+        document.getElementById('btn-next').style.opacity = currentSlide === totalSlides - 1 ? '0.3' : '1';
+        document.getElementById('btn-next').style.pointerEvents = currentSlide === totalSlides - 1 ? 'none' : 'auto';
+    }
+
+    function nextSlide() {
+        if (currentSlide < totalSlides - 1) {
+            currentSlide++;
+            updateUI();
+        }
+    }
+
+    function prevSlide() {
+        if (currentSlide > 0) {
+            currentSlide--;
+            updateUI();
+        }
+    }
+
+    function goToSlide(n) {
+        currentSlide = n;
+        updateUI();
+    }
+
+    function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                console.log(`Error: ${err.message}`);
+            });
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+    }
+
+    document.addEventListener('fullscreenchange', () => {
+        const icon = document.getElementById('icon-fullscreen');
+        if (document.fullscreenElement) {
+            icon.classList.remove('fa-expand');
+            icon.classList.add('fa-compress');
+        } else {
+            icon.classList.remove('fa-compress');
+            icon.classList.add('fa-expand');
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            nextSlide();
+        } else if (e.key === 'ArrowLeft') {
+            prevSlide();
+        }
+    });
+
+    updateUI();
+</script>
+
+</body>
+</html>
