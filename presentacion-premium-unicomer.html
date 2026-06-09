@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Ventas Institucionales - Unicomer Corporate</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        unicomer: {
+                            blue: '#001A3F',
+                            dark: '#050B14',
+                            surface: '#0E1726',
+                            border: '#1E293B',
+                            magenta: '#E6007E',
+                            accent: '#38BDF8',
+                            success: '#10B981',
+                            warning: '#F59E0B'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #020617;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .presentation-frame {
+            width: 100vw;
+            height: 56.25vw;
+            max-height: 100vh;
+            max-width: 177.78vh;
+            position: relative;
+            background-color: #050B14;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.9);
+            overflow: hidden;
+        }
+
+        .slide-layout {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(0.97) translateY(10px);
+            display: flex;
+            flex-direction: column;
+            padding: 3vw 4.5vw 6vw 4.5vw;
+            z-index: 1;
+        }
+
+        .slide-layout.slide-active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1) translateY(0);
+            z-index: 10;
+        }
+
+        .slide-layout::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 85% 15%, rgba(0, 26, 63, 0.4) 0%, transparent 60%),
+                        radial-gradient(circle at 15% 85%, rgba(230, 0, 126, 0.06) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .slide-header {
+            font-size: 2.1vw;
+            font-weight: 700;
+            margin-bottom: 1.2vw;
+            display: flex;
+            align-items: center;
+            gap: 0.8vw;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 0.6vw;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        .glass-card {
+            background: rgba(14, 23, 38, 0.65);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 0.75vw;
+            transition: all 0.3s ease;
+        }
+
+        .interactive-flow-node {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .interactive-flow-node::after {
+            content: '\f061';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: -0.7vw;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.15);
+            font-size: 0.9vw;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        .interactive-flow-node:last-child::after {
+            display: none;
+        }
+
+        .interactive-flow-node:hover, .interactive-flow-node.node-active {
+            border-color: #E6007E;
+            background: rgba(230, 0, 126, 0.09);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(230, 0, 126, 0.25);
+        }
+
+        .interactive-flow-node.node-active::after {
+            color: #E6007E;
+        }
+
+        .nav-dock {
+            position: absolute;
+            bottom: 1.8vw;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 4.5vw;
+            z-index: 50;
+        }
+
+        .control-trigger {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            width: 2.8vw;
+            height: 2.8vw;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1vw;
+            backdrop-filter: blur(8px);
+        }
+
+        .control-trigger:hover {
+            background: #E6007E;
+            border-color: #E6007E;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(230, 0, 126, 0.4);
+        }
+
+        .dot-indicator {
+            width: 0.55vw;
+            height: 0.55vw;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot-indicator.dot-active {
+            background: #E6007E;
+            transform: scale(1.4);
+            box-shadow: 0 0 10px rgba(230, 0, 126, 0.6);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: rgba(56, 189, 248, 0.08);
+            color: #38BDF8;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .vw-text-sm { font-size: 0.85vw; }
+        .vw-text-base { font-size: 1vw; }
+        .vw-text-lg { font-size: 1.15vw; }
+        .vw-text-xl { font-size: 1.35vw; }
+        .vw-text-2xl { font-size: 1.7vw; }
+        .vw-text-3xl { font-size: 2.3vw; }
+        .vw-text-4xl { font-size: 3vw; }
+        .vw-text-5xl { font-size: 4.2vw; }
+
+        .badge-owner {
+            font-size: 0.72vw;
+            padding: 0.2vw 0.5vw;
+            border-radius: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            width: fit-content;
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-frame">
+
+    <button onclick="changeSlide(-1)" class="absolute bottom-[1.8vw] left-[4.5vw] w-[2.8vw] h-[2.8vw] bg-white/5 hover:bg-unicomer-magenta border border-white/10 rounded-full flex items-center justify-center text-white text-[1vw] backdrop-blur-md transition-all z-[100] cursor-pointer">
+        <i class="fa-solid fa-chevron-left"></i>
+    </button>
+
+    <div class="nav-dock">
+        <div></div>
+        <div id="dots-container" class="flex gap-[0.6vw]"></div>
+        <div></div>
+    </div>
+
+    <button onclick="changeSlide(1)" class="absolute bottom-[1.8vw] right-[4.5vw] w-[2.8vw] h-[2.8vw] bg-white/5 hover:bg-unicomer-magenta border border-white/10 rounded-full flex items-center justify-center text-white text-[1vw] backdrop-blur-md transition-all z-[100] cursor-pointer">
+        <i class="fa-solid fa-chevron-right"></i>
+    </button>
+
+    <!-- SLIDE 1: PORTADA -->
+    <div class="slide-layout slide-active" id="slide-index-0" style="background: linear-gradient(135deg, #050B14 0%, #001A3F 100%);">
+        <div class="absolute top-[3vw] left-[4.5vw] z-20">
+            <div class="flex items-center gap-[1vw] bg-white/[0.02] border border-white/10 px-[1.5vw] py-[0.6vw] rounded-full backdrop-blur-md">
+                <div class="flex items-center font-heading font-bold tracking-wider text-[1.2vw] text-white">
+                    <span class="text-white">UNI</span><span class="text-unicomer-magenta">COMER</span>
+                    <span class="text-unicomer-accent font-light text-[0.9vw] ml-[0.5vw] border-l border-white/20 pl-[0.5vw]">ECUADOR</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col justify-center h-full max-w-[75vw] pl-[2vw] mt-[2vw]">
+            <div class="inline-flex items-center gap-[0.8vw] bg-unicomer-magenta/10 border border-unicomer-magenta/30 px-[1.2vw] py-[0.4vw] rounded-full mb-[1.5vw] w-fit">
+                <i class="fa-solid fa-file-shield text-unicomer-magenta text-[0.9vw]"></i>
+                <span class="text-[0.8vw] font-bold tracking-[0.25em] text-unicomer-magenta uppercase">Manual de Procedimientos Operativos</span>
+            </div>
+            
+            <h1 class="vw-text-5xl font-extrabold leading-[1.1] tracking-tight text-white font-heading uppercase">
+                Ventas<br>
+                <span class="bg-gradient-to-r from-unicomer-accent to-unicomer-magenta bg-clip-text text-transparent">Institucionales</span>
+            </h1>
+            
+            <p class="vw-text-2xl font-light text-gray-400 border-l-2 border-unicomer-magenta pl-[1.5vw] mt-[1.2vw] leading-relaxed">
+                Código: SM.CA - PR.12.02 • Versión 02 • Estructura y lineamientos de control de riesgos comerciales.
+            </p>
+            
+            <div class="mt-[2.5vw] flex items-center gap-[1.5vw] text-gray-500 vw-text-base">
+                <div class="flex items-center gap-[0.4vw]"><i class="fa-solid fa-folder-tree text-unicomer-accent"></i> <span>Dirección de Riesgos</span></div>
+                <div class="w-[1px] h-[1vw] bg-gray-800"></div>
+                <div class="flex items-center gap-[0.4vw]"><i class="fa-solid fa-shield-halved"></i> <span>Auditoría y Control Interno</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: SECCIÓN FUNDAMENTOS -->
+    <div class="slide-layout" id="slide-index-1" style="justify-content: center; text-align: center;">
+        <div class="max-w-[50vw] mx-auto space-y-[1vw]">
+            <h3 class="text-unicomer-magenta font-heading font-bold text-[1.1vw] tracking-[0.3em] uppercase">Sección 01</h3>
+            <h2 class="font-heading font-extrabold text-[3.2vw] text-white leading-tight uppercase">Fundamentos del<br>Procedimiento</h2>
+            <div class="w-[5vw] h-[4px] bg-unicomer-accent mx-auto my-[1.5vw]"></div>
+            <p class="vw-text-lg text-gray-400">Objetivos estratégicos, alcance normativo y definiciones clave del negocio institucional.</p>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: OBJETIVO Y ALCANCE -->
+    <div class="slide-layout" id="slide-index-2">
+        <h2 class="slide-header"><i class="fa-solid fa-bullseye text-unicomer-magenta"></i> Objetivo y Alcance General</h2>
+        <div class="flex-grow flex items-center justify-center gap-[2vw]">
+            <div class="glass-card p-[2vw] flex-1 border-slate-800/60 space-y-[1vw] h-full flex flex-col justify-center">
+                <div class="w-[3.5vw] h-[3.5vw] bg-unicomer-magenta/10 rounded-xl flex items-center justify-center text-unicomer-magenta vw-text-2xl">
+                    <i class="fa-solid fa-target-arrow"></i>
+                </div>
+                <h3 class="font-heading font-bold vw-text-xl text-white">Objetivo del Manual</h3>
+                <p class="vw-text-base text-gray-400 leading-relaxed">
+                    Establecer y describir los lineamientos comerciales, operativos y de riesgo para la venta formal de mercadería (nueva o seminueva) a instituciones constituidas legalmente como personas jurídicas, ya sea para consumo propio o de sus colaboradores afiliados.
+                </p>
+            </div>
+            <div class="glass-card p-[2vw] flex-1 border-slate-800/60 space-y-[1vw] h-full flex flex-col justify-center">
+                <div class="w-[3.5vw] h-[3.5vw] bg-unicomer-accent/10 rounded-xl flex items-center justify-center text-unicomer-accent vw-text-2xl">
+                    <i class="fa-solid fa-users-gear"></i>
+                </div>
+                <h3 class="font-heading font-bold vw-text-xl text-white">Alcance de Aplicación</h3>
+                <p class="vw-text-base text-gray-400 leading-relaxed">
+                    Este procedimiento rige de manera obligatoria y estricta para las áreas corporativas de <strong>Ventas, Crédito y Cobros</strong> de todas las cadenas de Unicomer de Ecuador S.A., involucrando a Ejecutivos, Jefes de Tienda y Analistas.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: DEFINICIONES -->
+    <div class="slide-layout" id="slide-index-3">
+        <h2 class="slide-header"><i class="fa-solid fa-book-open text-unicomer-magenta"></i> Modelos de Convenio y Definiciones</h2>
+        <div class="flex-grow flex flex-col justify-center">
+            <div class="glass-card overflow-hidden border-slate-800">
+                <table class="vw-text-base">
+                    <thead>
+                        <tr class="border-b border-slate-800">
+                            <th class="p-[1vw] w-[25%]">Concepto</th>
+                            <th class="p-[1vw]">Definición Operativa Estándar</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-slate-200">
+                        <tr class="border-b border-slate-800/50">
+                            <td class="p-[1vw] font-bold text-white">Tipo de Convenio</td>
+                            <td class="p-[1vw] text-slate-400">Clasificación comercial otorgada a la empresa cliente, en base a la cual se determinan los requisitos y riesgos autorizados.</td>
+                        </tr>
+                        <tr class="border-b border-slate-800/50">
+                            <td class="p-[1vw] font-bold text-white">Garante Solidario</td>
+                            <td class="p-[1vw] text-slate-400">Modalidad legal donde la institución se constituye como responsable directa, solidaria y total de la deuda adquirida ante Unicomer.</td>
+                        </tr>
+                        <tr class="border-b border-slate-800/50">
+                            <td class="p-[1vw] font-bold text-white">Agente de Retención</td>
+                            <td class="p-[1vw] text-slate-400">La institución asume la responsabilidad estricta de retener, consolidar y liquidar los valores directamente desde el rol de pagos de sus colaboradores.</td>
+                        </tr>
+                        <tr>
+                            <td class="p-[1vw] font-bold text-white">Línea TXC</td>
+                            <td class="p-[1vw] text-slate-400">Asignación interna de un cupo revolvente rotativo bajo parámetros similares a una tarjeta de crédito corporativa.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: POLÍTICAS INVIOLABLES -->
+    <div class="slide-layout" id="slide-index-4">
+        <h2 class="slide-header"><i class="fa-solid fa-shield-halved text-unicomer-magenta"></i> Políticas y Reglas Inviolables</h2>
+        <div class="flex-grow flex flex-col justify-center space-y-[1.2vw]">
+            <div class="grid grid-cols-2 gap-[1.5vw]">
+                <div class="glass-card p-[1.5vw] border-slate-800/60 flex gap-[1vw] interactive-flow-node">
+                    <div class="w-[2.5vw] h-[2.5vw] bg-unicomer-magenta/15 rounded-lg flex items-center justify-center text-unicomer-magenta flex-shrink-0">
+                        <i class="fa-solid fa-check-double"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-heading font-bold vw-text-lg text-white mb-[0.4vw]">Excepciones Autorizadas</h4>
+                        <p class="vw-text-sm text-gray-400">Requieren aprobación de Gerencia General + Gerencia de Ventas firmado.</p>
+                    </div>
+                </div>
+                <div class="glass-card p-[1.5vw] border-slate-800/60 flex gap-[1vw] interactive-flow-node">
+                    <div class="w-[2.5vw] h-[2.5vw] bg-unicomer-accent/15 rounded-lg flex items-center justify-center text-unicomer-accent flex-shrink-0">
+                        <i class="fa-solid fa-globe"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-heading font-bold vw-text-lg text-white mb-[0.4vw]">Cobertura Nacional</h4>
+                        <p class="vw-text-sm text-gray-400">Todas las cadenas de Unicomer Ecuador están autorizadas para ventas institucionales.</p>
+                    </div>
+                </div>
+                <div class="glass-card p-[1.5vw] border-slate-800/60 flex gap-[1vw] interactive-flow-node">
+                    <div class="w-[2.5vw] h-[2.5vw] bg-unicomer-success/15 rounded-lg flex items-center justify-center text-unicomer-success flex-shrink-0">
+                        <i class="fa-solid fa-box"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-heading font-bold vw-text-lg text-white mb-[0.4vw]">Mercadería Autorizada</h4>
+                        <p class="vw-text-sm text-gray-400">Aplica únicamente a mercadería nueva y seminueva (Ofertón).</p>
+                    </div>
+                </div>
+                <div class="glass-card p-[1.5vw] border-slate-800/60 flex gap-[1vw] interactive-flow-node">
+                    <div class="w-[2.5vw] h-[2.5vw] bg-unicomer-warning/15 rounded-lg flex items-center justify-center text-unicomer-warning flex-shrink-0">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-heading font-bold vw-text-lg text-white mb-[0.4vw]">Vigencia Máxima</h4>
+                        <p class="vw-text-sm text-gray-400">Todo convenio institucional tiene vigencia máxima de 1 AÑO.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: FLUJO GENERAL -->
+    <div class="slide-layout" id="slide-index-5">
+        <h2 class="slide-header"><i class="fa-solid fa-diagram-project text-unicomer-magenta"></i> Descripción del Flujo General de Procesos</h2>
+        <div class="flex-grow flex items-center justify-center">
+            <div class="space-y-[1.5vw] max-w-[85vw]">
+                <div class="flex gap-[1vw] items-center">
+                    <div class="glass-card p-[1.5vw] flex-1 interactive-flow-node">
+                        <div class="flex items-center gap-[0.8vw] mb-[0.8vw]">
+                            <div class="w-[2.2vw] h-[2.2vw] bg-unicomer-magenta/20 rounded-full flex items-center justify-center text-unicomer-magenta vw-text-lg font-bold">1</div>
+                            <h4 class="font-heading font-bold vw-text-lg text-white">Seleccionar Tipo de Negociación</h4>
+                        </div>
+                        <p class="vw-text-sm text-gray-400">Institución elige plan según documento SM.CA - PR12.OA01</p>
+                    </div>
+                </div>
+                <div class="flex gap-[1vw] items-center">
+                    <div class="glass-card p-[1.5vw] flex-1 interactive-flow-node">
+                        <div class="flex items-center gap-[0.8vw] mb-[0.8vw]">
+                            <div class="w-[2.2vw] h-[2.2vw] bg-unicomer-accent/20 rounded-full flex items-center justify-center text-unicomer-accent vw-text-lg font-bold">2</div>
+                            <h4 class="font-heading font-bold vw-text-lg text-white">Recolectar y Validar Documentos</h4>
+                        </div>
+                        <p class="vw-text-sm text-gray-400">Revisión de requisitos mínimos en SRI, Superintendencia y Buró de Crédito</p>
+                    </div>
+                </div>
+                <div class="flex gap-[1vw] items-center">
+                    <div class="glass-card p-[1.5vw] flex-1 interactive-flow-node">
+                        <div class="flex items-center gap-[0.8vw] mb-[0.8vw]">
+                            <div class="w-[2.2vw] h-[2.2vw] bg-unicomer-success/20 rounded-full flex items-center justify-center text-unicomer-success vw-text-lg font-bold">3</div>
+                            <h4 class="font-heading font-bold vw-text-lg text-white">Registrar en SIAR y Crear Cupo</h4>
+                        </div>
+                        <p class="vw-text-sm text-gray-400">Sistema de registro y asignación de límite de crédito institucional</p>
+                    </div>
+                </div>
+                <div class="flex gap-[1vw] items-center">
+                    <div class="glass-card p-[1.5vw] flex-1 interactive-flow-node">
+                        <div class="flex items-center gap-[0.8vw] mb-[0.8vw]">
+                            <div class="w-[2.2vw] h-[2.2vw] bg-unicomer-warning/20 rounded-full flex items-center justify-center text-unicomer-warning vw-text-lg font-bold">4</div>
+                            <h4 class="font-heading font-bold vw-text-lg text-white">Generar Venta y Realizar Seguimiento</h4>
+                        </div>
+                        <p class="vw-text-sm text-gray-400">Emisión de factura y monitoreo continuo de pagos y cobros</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 7: CRITERIOS APROBACIÓN -->
+    <div class="slide-layout" id="slide-index-6">
+        <h2 class="slide-header"><i class="fa-solid fa-money-bill-trend-up text-unicomer-magenta"></i> Criterios y Límites de Aprobación</h2>
+        <div class="flex-grow flex flex-col justify-center">
+            <div class="glass-card overflow-hidden border-slate-800">
+                <table class="vw-text-base">
+                    <thead>
+                        <tr class="border-b border-slate-800">
+                            <th class="p-[1vw]">Rango de Monto</th>
+                            <th class="p-[1vw]">Autoridad Aprobadora</th>
+                            <th class="p-[1vw]">Restricciones y Condiciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-slate-200">
+                        <tr class="border-b border-slate-800/50 bg-unicomer-magenta/5">
+                            <td class="p-[1vw] font-bold text-white">Hasta USD $5,000</td>
+                            <td class="p-[1vw] text-slate-400">Supervisor o Jefe de Crédito</td>
+                            <td class="p-[1vw] text-slate-400">Solo para operaciones sin entrega de mercadería</td>
+                        </tr>
+                        <tr class="border-b border-slate-800/50">
+                            <td class="p-[1vw] font-bold text-white">Hasta USD $15,000</td>
+                            <td class="p-[1vw] text-slate-400">Jefe de Crédito</td>
+                            <td class="p-[1vw] text-slate-400">Requisitos normales sin restricción especial</td>
+                        </tr>
+                        <tr>
+                            <td class="p-[1vw] font-bold text-white">Mayor USD $15,000</td>
+                            <td class="p-[1vw] text-slate-400">Gerencia de Crédito y Cobros</td>
+                            <td class="p-[1vw] text-slate-400">Requiere análisis exhaustivo y aprobación ejecutiva</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 8: ACTIVIDAD 1 CRITERIOS -->
+    <div class="slide-layout" id="slide-index-7">
+        <h2 class="slide-header"><i class="fa-solid fa-list-check text-unicomer-magenta"></i> Actividad 1: Establecer Criterios y Requisitos</h2>
+        <div class="flex-grow flex flex-col justify-center space-y-[0.8vw]">
+            <div class="grid grid-cols-2 gap-[1.2vw]">
+                <div class="glass-card p-[1.3vw] border-slate-800/60">
+                    <h4 class="font-heading font-bold vw-text-lg text-white mb-[0.6vw] flex items-center gap-[0.5vw]"><i class="fa-solid fa-file-pen text-unicomer-magenta"></i> Seleccionar Plan</h4>
+                    <p class="vw-text-sm text-gray-400">Institución elige convenio según anexo SM.CA - PR12.OA01 con niveles A, B, C, D.</p>
+                </div>
+                <div class="glass-card p-[1.3vw] border-slate-800/60">
+                    <h4 class="font-heading font-bold vw-text-lg text-white mb-[0.6vw] flex items-center gap-[0.5vw]"><i class="fa-solid fa-clipboard-check text-unicomer-magenta"></i> Informar Requisitos</h4>
+                    <p class="vw-text-sm text-gray-400">Se notifican requisitos mínimos (Anexo 2). Para Pequeños Negocios se adjunta formulario SM.CA - PR12.FR01.</p>
+                </div>
+                <div class="glass-card p-[1.3vw] border-slate-800/60">
+                    <h4 class="font-heading font-bold vw-text-lg text-white mb-[0.6vw] flex items-center gap-[0.5vw]"><i class="fa-solid fa-folder-open text-unicomer-magenta"></i> Entregar Documentación</h4>
+                    <p class="vw-text-sm text-gray-400">Institución envía todos los documentos solicitados para revisión formal.</p>
+                </div>
+                <div class="glass-card p-[1.3vw] border-slate-800/60">
+                    <h4 class="font-heading font-bold vw-text-lg text-white mb-[0.6vw] flex items-center gap-[0.5vw]"><i class="fa-solid fa-magnifying-glass text-unicomer-magenta"></i> Validar Documentos</h4>
+                    <p class="vw-text-sm text-gray-400">Verificación de completitud, firmas, SRI, Superintendencia y Buró de Crédito.</p>
+                </div>
+                <div class="glass-card p-[1.3vw] border-slate-800/60">
+                    <h4 class="font-heading font-bold vw-text-lg text-white mb-[0.6vw] flex items-center gap-[0.5vw]"><i class="fa-solid fa-database text-unicomer-magenta"></i> Registrar en SIAR</h4>
+                    <p class="vw-text-sm text-gray-400">Ingreso de información en Sistema SIAR (Menú Ventas Institucionales) con descuentos.</p>
+                </div>
+                <div class="glass-card p-[1.3vw] border-slate-800/60">
+                    <h4 class="font-heading font-bold vw-text-lg text-white mb-[0.6vw] flex items-center gap-[0.5vw]"><i class="fa-solid fa-handshake text-unicomer-magenta"></i> Crear Cupo</h4>
+                    <p class="vw-text-sm text-gray-400">Asignación de límite de crédito según monto y autoridad correspondiente.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 9: ACTIVIDAD 2 VENTAS -->
+    <div class="slide-layout" id="slide-index-8">
+        <h2 class="slide-header"><i class="fa-solid fa-cash-register text-unicomer-magenta"></i> Actividad 2: Generar Ventas Institucionales</h2>
+        <div class="flex-grow flex flex-col justify-center space-y-[0.8vw]">
+            <div class="grid grid-cols-3 gap-[1vw]">
+                <div class="glass-card p-[1.2vw] border-slate-800/60">
+                    <h4 class="font-heading font-bold vw-text-base text-white mb-[0.5vw] flex items-center gap-[0.4vw]"><i class="fa-solid fa-receipt text-unicomer-accent"></i> Cotizar</h4>
+                    <p class="vw-text-sm text-gray-400">Envío formal de cotización en formato SM.CA – PR12.FR05 (Anexo 7) por correo.</p>
+                </div>
+                <div class="glass-card p-[1.2vw] border-slate-800/60">
+                    <h4 class="font-heading font-bold vw-text-base text-white mb-[0.5vw] flex items-center gap-[0.4vw]"><i class="fa-solid fa-arrow-right text-unicomer-accent"></i> Solicitud Compra</h4>
+                    <p class="vw-text-sm text-gray-400">Generación en SIAR seleccionando canal INSTITUCIONES, institución y plazo acordado.</p>
+                </div>
+                <div class="glass-card p-[1.2vw] border-slate-800/60">
+                    <h4 class="font-heading font-bold vw-text-base text-white mb-[0.5vw] flex items-center gap-[0.4vw]"><i class="fa-solid fa-file-contract text-unicomer-accent"></i> Orden de Compra</h4>
+                    <p class="vw-text-sm text-gray-400">Institución envía orden firmada. Si no existe, se entrega modelo SM.CA – PR12.FR06 (Anexo 8).</p>
+                </div>
+                <div class="glass-card p-[1.2vw] border-slate-800/60">
+                    <h4 class="font-heading font-bold vw-text-base text-white mb-[0.5vw] flex items-center gap-[0.4vw]"><i class="fa-solid fa-credit-card text-unicomer-accent"></i> Generar Crédito</h4>
+                    <p class="vw-text-sm text-gray-400">Solicitud de compra y crédito generada en SIAR para aprobación formal.</p>
+                </div>
+                <div class="glass-card p-[1.2vw] border-slate-800/60">
+                    <h4 class="font-heading font-bold vw-text-base text-white mb-[0.5vw] flex items-center gap-[0.4vw]"><i class="fa-solid fa-check-circle text-unicomer-accent"></i> Validar Crédito</h4>
+                    <p class="vw-text-sm text-gray-400">Jefe de Crédito revisa completitud y aprueba solicitud de compra-crédito.</p>
+                </div>
+                <div class="glass-card p-[1.2vw] border-slate-800/60">
+                    <h4 class="font-heading font-bold vw-text-base text-white mb-[0.5vw] flex items-center gap-[0.4vw]"><i class="fa-solid fa-invoice text-unicomer-accent"></i> Generar Factura</h4>
+                    <p class="vw-text-sm text-gray-400">Sistema genera automáticamente factura de venta institucional con número y detalles.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 10: DOCUMENTOS ANEXOS -->
+    <div class="slide-layout" id="slide-index-9">
+        <h2 class="slide-header"><i class="fa-solid fa-paperclip text-unicomer-magenta"></i> Documentos Anexos de Referencia Obligatoria</h2>
+        <div class="flex-grow flex flex-col justify-center">
+            <div class="grid grid-cols-4 gap-[1vw]">
+                <div class="glass-card p-[1.3vw] border-slate-800/60 text-center interactive-flow-node">
+                    <div class="w-[3vw] h-[3vw] bg-unicomer-magenta/15 rounded-lg flex items-center justify-center text-unicomer-magenta mx-auto mb-[0.5vw] vw-text-2xl">
+                        <i class="fa-solid fa-list"></i>
+                    </div>
+                    <h4 class="font-heading font-bold vw-text-base text-white mb-[0.3vw]">Anexo 1</h4>
+                    <p class="vw-text-sm text-gray-400">Planes Institucionales A, B, C, D</p>
+                </div>
+                <div class="glass-card p-[1.3vw] border-slate-800/60 text-center interactive-flow-node">
+                    <div class="w-[3vw] h-[3vw] bg-unicomer-accent/15 rounded-lg flex items-center justify-center text-unicomer-accent mx-auto mb-[0.5vw] vw-text-2xl">
+                        <i class="fa-solid fa-clipboard"></i>
+                    </div>
+                    <h4 class="font-heading font-bold vw-text-base text-white mb-[0.3vw]">Anexo 2</h4>
+                    <p class="vw-text-sm text-gray-400">Requisitos Mínimos por Plan</p>
+                </div>
+                <div class="glass-card p-[1.3vw] border-slate-800/60 text-center interactive-flow-node">
+                    <div class="w-[3vw] h-[3vw] bg-unicomer-success/15 rounded-lg flex items-center justify-center text-unicomer-success mx-auto mb-[0.5vw] vw-text-2xl">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <h4 class="font-heading font-bold vw-text-base text-white mb-[0.3vw]">Anexo 3</h4>
+                    <p class="vw-text-sm text-gray-400">Formato Pequeños Negocios</p>
+                </div>
+                <div class="glass-card p-[1.3vw] border-slate-800/60 text-center interactive-flow-node">
+                    <div class="w-[3vw] h-[3vw] bg-unicomer-warning/15 rounded-lg flex items-center justify-center text-unicomer-warning mx-auto mb-[0.5vw] vw-text-2xl">
+                        <i class="fa-solid fa-handshake"></i>
+                    </div>
+                    <h4 class="font-heading font-bold vw-text-base text-white mb-[0.3vw]">Anexo 4</h4>
+                    <p class="vw-text-sm text-gray-400">Convenio Colaboradores</p>
+                </div>
+                <div class="glass-card p-[1.3vw] border-slate-800/60 text-center interactive-flow-node">
+                    <div class="w-[3vw] h-[3vw] bg-unicomer-magenta/15 rounded-lg flex items-center justify-center text-unicomer-magenta mx-auto mb-[0.5vw] vw-text-2xl">
+                        <i class="fa-solid fa-pen-fancy"></i>
+                    </div>
+                    <h4 class="font-heading font-bold vw-text-base text-white mb-[0.3vw]">Anexo 5</h4>
+                    <p class="vw-text-sm text-gray-400">Autoridades Firmantes</p>
+                </div>
+                <div class="glass-card p-[1.3vw] border-slate-800/60 text-center interactive-flow-node">
+                    <div class="w-[3vw] h-[3vw] bg-unicomer-accent/15 rounded-lg flex items-center justify-center text-unicomer-accent mx-auto mb-[0.5vw] vw-text-2xl">
+                        <i class="fa-solid fa-scroll"></i>
+                    </div>
+                    <h4 class="font-heading font-bold vw-text-base text-white mb-[0.3vw]">Anexo 6</h4>
+                    <p class="vw-text-sm text-gray-400">Contrato Compraventa</p>
+                </div>
+                <div class="glass-card p-[1.3vw] border-slate-800/60 text-center interactive-flow-node">
+                    <div class="w-[3vw] h-[3vw] bg-unicomer-success/15 rounded-lg flex items-center justify-center text-unicomer-success mx-auto mb-[0.5vw] vw-text-2xl">
+                        <i class="fa-solid fa-chart-bar"></i>
+                    </div>
+                    <h4 class="font-heading font-bold vw-text-base text-white mb-[0.3vw]">Anexo 7</h4>
+                    <p class="vw-text-sm text-gray-400">Formato Cotización</p>
+                </div>
+                <div class="glass-card p-[1.3vw] border-slate-800/60 text-center interactive-flow-node">
+                    <div class="w-[3vw] h-[3vw] bg-unicomer-warning/15 rounded-lg flex items-center justify-center text-unicomer-warning mx-auto mb-[0.5vw] vw-text-2xl">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                    </div>
+                    <h4 class="font-heading font-bold vw-text-base text-white mb-[0.3vw]">Anexo 8</h4>
+                    <p class="vw-text-sm text-gray-400">Modelo Orden Compra</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 11: CIERRE -->
+    <div class="slide-layout" id="slide-index-10" style="justify-content: center; background: linear-gradient(135deg, #050B14 0%, #001A3F 100%);">
+        <div class="text-center space-y-[2vw]">
+            <div class="inline-flex items-center justify-center w-[8vw] h-[8vw] bg-unicomer-magenta/15 rounded-full mx-auto">
+                <i class="fa-solid fa-circle-check text-unicomer-magenta vw-text-4xl"></i>
+            </div>
+            <div>
+                <h2 class="font-heading font-extrabold vw-text-4xl text-white mb-[1vw] uppercase">Procedimiento Completo</h2>
+                <p class="vw-text-xl text-gray-400">Todos los lineamientos, criterios y requisitos han sido presentados de manera clara y sistemática.</p>
+            </div>
+            <div class="pt-[2vw] border-t border-white/10 space-y-[0.8vw]">
+                <p class="vw-text-base text-unicomer-accent font-bold tracking-[0.2em] uppercase">PREGUNTAS Y SEGUIMIENTO</p>
+                <p class="vw-text-base text-gray-400">Dirección de Riesgos • Auditoría y Control Interno • Gerencia de Crédito y Cobros</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide-layout');
+    const totalSlides = slides.length;
+
+    function updateDots() {
+        const dotsContainer = document.getElementById('dots-container');
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'dot-indicator' + (i === currentSlide ? ' dot-active' : '');
+            dot.onclick = () => goToSlide(i);
+            dotsContainer.appendChild(dot);
+        }
+    }
+
+    function showSlide(n) {
+        slides.forEach(slide => slide.classList.remove('slide-active'));
+        slides[n].classList.add('slide-active');
+        updateDots();
+    }
+
+    function changeSlide(direction) {
+        currentSlide += direction;
+        if (currentSlide >= totalSlides) currentSlide = totalSlides - 1;
+        if (currentSlide < 0) currentSlide = 0;
+        showSlide(currentSlide);
+    }
+
+    function goToSlide(n) {
+        currentSlide = n;
+        showSlide(currentSlide);
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') changeSlide(-1);
+        if (e.key === 'ArrowRight') changeSlide(1);
+    });
+
+    updateDots();
+</script>
+
+</body>
+</html>
